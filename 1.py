@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+
 import firebase_admin, telethon, random
 from firebase_admin import db,credentials
 API_ID= 12468937
@@ -11,59 +11,7 @@ default_app = firebase_admin.initialize_app( cred,{'databaseURL':"https://flask-
 Keys = (db.reference(f"/Key/")).get()
 
 DIGITS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] 
-app=Flask(__name__)
 
-@app.route('/')
-def _():
-    return "Hello, World"
-
-@app.route('/Key/<string:n>')
-def __(n):
-    key="".join(n[0:8])
-    proxy="".join(n[8:50])
-
-    if key in Keys:
-        proxys = (db.reference(f"/Proxy/{key}/")).get()
-        if proxys ==None:
-            proxys=[]
-        if not len(proxys)<10:
-            stat="Too Many Proxies Ask Owner to Restart"
-        else:
-            if not proxy in proxys:
-                proxys.append(f"{proxy}")
-                pro= (db.reference(f"/Proxy/{key}/")).set(proxys)
-            stat="Done"
-    else:
-        stat="Invalid"
-    return jsonify({
-        "stats":stat
-    })
-
-"""
-
-@app.route('/Gen/<string:n>')
-def gen(n):
-    key="".join(n[0:8])
-    proxys = (db.reference(f"/Proxy/{key}/")).get()
-    if proxys ==None:
-        stat="Key Not Available in DataBase"
-    return jsonify({
-        "stats":stat
-    })
-
-@app.route('/Clear/<string:n>')
-def Clear(n):
-    key="".join(n[0:8])
-    if not key in Keys:
-        stat="Key Not Available"
-    else:
-        pros= (db.reference(f"/Proxy/{key}/")).get()
-        pro= (db.reference(f"/Proxy/{key}/")).set([])
-        stat=f"{pros} Terminated"
-    return jsonify({
-        "stats":stat
-    })
-"""
 
 @client.on(telethon.events.NewMessage(incoming=True, pattern='/start'))
 async def _(e):
@@ -113,6 +61,3 @@ async def _(e):
                 except TimeoutError:
                     await xmr.send_message("Time Limit Reached of 5 Min.")
                     return 
-
-if __name__ == "__main__":
-    app.run(debug=True)
