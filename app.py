@@ -5,7 +5,7 @@ API_ID= 12468937
 API_HASH= "84355e09d8775921504c93016e1e9438"
 BOT_TOKEN = "5280985880:AAEw56OVMxOHRAJ3E3RHdMF1IHqMxGI5H3I"
 Owner=[2026675025,1303790979]
-client = telethon.TelegramClient(None, api_id=API_ID , api_hash=API_HASH).start(bot_token=BOT_TOKEN)
+#client = telethon.TelegramClient(None, api_id=API_ID , api_hash=API_HASH).start(bot_token=BOT_TOKEN)
 cred = credentials.Certificate('1.json')
 default_app = firebase_admin.initialize_app( cred,{'databaseURL':"https://flask-c50a2-default-rtdb.asia-southeast1.firebasedatabase.app/"})
 Keys = (db.reference(f"/Key/")).get()
@@ -63,7 +63,7 @@ def Clear(n):
     return jsonify({
         "stats":stat
     })
-"""
+
 
 @client.on(telethon.events.NewMessage(incoming=True, pattern='/start'))
 async def _(e):
@@ -113,6 +113,6 @@ async def _(e):
                 except TimeoutError:
                     await xmr.send_message("Time Limit Reached of 5 Min.")
                     return 
-
+"""
 if __name__ == "__main__":
     app.run(debug=True)
