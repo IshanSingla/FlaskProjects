@@ -43,7 +43,7 @@ def __(n):
 
 @app.route('/Ishan/', methods=['POST'])
 def home():
-        data = request.form
+        data = request.get_json()
         return jsonify({
                 "hi":data
             })
