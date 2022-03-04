@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import firebase_admin, telethon, random
 from firebase_admin import db,credentials
 API_ID= 12468937
@@ -39,6 +39,14 @@ def __(n):
         "stats":stat
     })
 
+
+
+@app.route('/Ishan/', methods=['POST'])
+def home():
+        data = request.json
+        return jsonify({
+                "hi":data
+            })
 """
 
 @app.route('/Gen/<string:n>')
@@ -115,4 +123,4 @@ async def _(e):
                     return 
 """
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(use_reloader=True, threaded=True)
