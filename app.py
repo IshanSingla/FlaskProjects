@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-import firebase_admin, telethon, random
+import firebase_admin,  random
 from firebase_admin import db,credentials
 API_ID= 12468937
 API_HASH= "84355e09d8775921504c93016e1e9438"
