@@ -1,4 +1,3 @@
 flask
 firebase_admin
-telethon
 gunicorn
