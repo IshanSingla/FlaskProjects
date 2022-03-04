@@ -21,7 +21,7 @@ def __():
         proxys = (db.reference(f"/Proxy/{key}/")).get()
         if proxys ==None:
             proxys=[]
-        if not len(proxys)<10:
+        if not len(proxys)<5:
             stat="Too Many Proxies Ask Owner to Restart"
         else:
             if not proxy in proxys:
