@@ -17,10 +17,11 @@ app=Flask(__name__)
 def _():
     return "Hello, World"
 
-@app.route('/Key/<string:n>')
-def __(n):
-    key="".join(n[0:8])
-    proxy="".join(n[8:50])
+@app.route('/Key/', methods=['POST'])
+def __():
+    data = request.get_json()
+    key=data['Key']
+    proxy=data['Proxy']
 
     if key in Keys:
         proxys = (db.reference(f"/Proxy/{key}/")).get()
@@ -41,12 +42,6 @@ def __(n):
 
 
 
-@app.route('/Ishan/', methods=['POST'])
-def home():
-        data = request.get_json()
-        return jsonify({
-                "hi":data
-            })
 """
 
 @app.route('/Gen/<string:n>')
