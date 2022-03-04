@@ -1,3 +1,3 @@
 import requests
-response = requests.post("https://inducedflask.herokuapp.com/Ishan?Key=0")
+response = requests.post("https://inducedflask.herokuapp.com/Ishan",json={"key":"hi"})
 print(response.text)
