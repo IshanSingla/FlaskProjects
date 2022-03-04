@@ -61,3 +61,5 @@ async def _(e):
                 except TimeoutError:
                     await xmr.send_message("Time Limit Reached of 5 Min.")
                     return 
+
+client.run_until_disconnected
