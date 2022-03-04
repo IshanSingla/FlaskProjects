@@ -3,7 +3,6 @@ import firebase_admin
 from firebase_admin import db,credentials
 cred = credentials.Certificate('1.json')
 default_app = firebase_admin.initialize_app( cred,{'databaseURL':"https://flask-c50a2-default-rtdb.asia-southeast1.firebasedatabase.app/"})
-Keys = (db.reference(f"/Key/")).get()
 
 app=Flask(__name__)
 
@@ -16,7 +15,7 @@ def __():
     data = request.get_json()
     key=data['Key']
     proxy=data['Proxy']
-
+    Keys = (db.reference(f"/Key/")).get()
     if key in Keys:
         proxys = (db.reference(f"/Proxy/{key}/")).get()
         if proxys ==None:
