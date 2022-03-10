@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 import firebase_admin
 from firebase_admin import db,credentials
 cred = credentials.Certificate('1.json')
@@ -8,7 +8,7 @@ app=Flask(__name__)
 
 @app.route('/')
 def _():
-    return "Hello, World"
+    return render_template("index.html")
 
 @app.route('/Key/', methods=['POST'])
 def __():
