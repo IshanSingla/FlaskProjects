@@ -1,8 +1,6 @@
 from flask import Flask, jsonify, request, render_template, send_file
 import firebase_admin, carbon, asyncio, os
 from firebase_admin import db,credentials
-from flask_cors import CORS
-from pyppeteer import launch
 cred = credentials.Certificate('1.json')
 default_app = firebase_admin.initialize_app( cred,{'databaseURL':"https://flask-c50a2-default-rtdb.asia-southeast1.firebasedatabase.app/"})
 
@@ -44,6 +42,8 @@ def key():
     })
 
 """
+from flask_cors import CORS
+from pyppeteer import launch
 app.secret_key = 'i_iz_noob'
 loop = asyncio.get_event_loop()
 CORS(app)
