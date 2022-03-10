@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="APIs Documentation">
+    <title>APIs</title>
+    <link rel="icon" href="https://telegra.ph/file/d1c1fe90117fa7322e229.jpg" type="image/x-icon">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/androidstudio.min.css"
+        integrity="sha512-1XN5rnQ4rhaGEfX3nlDJ4Hb7kKNMAi0+DWQ/cNf54tuuTGSs0Wyw6mbgzVxLUCQ+vxSpmzr4j87ROim2ChrYnA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="static/styles/style.css">
+    <link rel="stylesheet" href="static/styles/styleMobile.css">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2167251825126678"
+     crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <h1>APIs</h1>
+    <div>
+        <h2>Morse Code [<span id="reqType">GET</span>]</h2>
+        <ul>
+            <li><a href="https://apis.xditya.me/morse/encode?text=sampleText"
+                    target="_blank">/morse/encode?text=sampleText</a></li>
+            <li><a href="https://apis.xditya.me/morse/decode?text=.. .- -- .--. .-.. . -- --- .-. ... . -.-. --- -.."
+                    target="_blank">/morse/decode?text=.. .- --</a></li>
+        </ul>
+    </div>
+    <div>
+        <h2>QR Code [<span id="reqType">GET</span>]</h2>
+        <ul>
+            <li><a href="https://apis.xditya.me/qr/gen?text=sampleText" target="_blank">/qr/gen?text=sampleText</a></li>
+        </ul>
+    </div>
+    <div>
+        <h2>Lyrics [<span id="reqType">GET</span>]</h2>
+        <ul>
+            <li><a href="https://apis.xditya.me/lyrics?song=blinding+lights"
+                    target="_blank">/lyrics?song=blinding+lights</a></li>
+        </ul>
+    </div>
+    <div>
+        <h2>Notes Generator [<span id="reqType">GET</span>]</h2>
+        <ul>
+            <li><a href="https://apis.xditya.me/write?text=someTextHere" target="_blank">/write?text=someTextHere</a>
+            </li>
+        </ul>
+    </div>
+    <div>
+        <h2>Captcha Generator [<span id="reqType">GET</span>]</h2>
+        <ul>
+            <li><a href="https://apis.xditya.me/captcha" target="_blank">/captcha</a>
+            </li>
+            <li>
+                <a href="https://apis.xditya.me/captcha?options=6&length=5"
+                    target="_blank">/captcha?options=6&length=5</a>
+            </li>
+        </ul>
+    </div>
+    <div>
+        <h2>Logo Generator [<span id="reqType">POST</span>]</h2>
+        <ul>
+            <li><a href="https://apis.xditya.me/logo?text=Aditya" target="_blank">/logo?text=Aditya</a></li>
+        </ul>
+        <div class="codeBtns">
+            <button id="python">Python</button>
+            <button id="node.js">Node.JS</button>
+            <button id="golang">Golang</button>
+            <button id="dart">Dart</button>
+        </div>
+        <div class="fileName"></div>
+        <pre class="codeArea"></pre>
+        <button id="copyCode" data-clipboard-action="copy" data-clipboard-target=".codeArea">Copy Code</button>
+    </div>
+    <footer>
+        <p>Made with 💖 by <a href="https://telegram.dog/BotzHub" target="_blank">BotzHub</a></p>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/languages/dart.min.js"
+        integrity="sha512-6HwdQWmo8UW52QNluQqufVGDuPBU3UT8+4iEZGALWSCxKXM+jaYEM8ew9MEPrf+OdLwkI9SAEQ/2Fz9Ry5aMgA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/languages/javascript.min.js"
+        integrity="sha512-Jvh5kXa0Zu4HoSxPaZIVhCWPkD7b7gnWHVzv6jiaJwAJ18a/U6BOXludYfJYwHorpy2WFH0Df6EcFi5udu1dWA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        document.onkeydown = function (e) {
+            if (e.keyCode == 123) {
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+                return false;
+            }
+            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+                return false;
+            }
+        };
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+        });
+        new ClipboardJS('#copyCode');
+        document.getElementsByClassName('codeArea')[0].innerHTML = `<code class="language-dart">import 'dart:io';
+void main(List args) async {
+    print('Click On The Buttons Above To Generate The Code');
+}</code>`;
+        document.getElementsByClassName('fileName')[0].innerText = "Info.dart";
+        hljs.highlightAll();
+    </script>
+    <script>// Python
+        document.getElementById("python").addEventListener("click", () => {
+            document.getElementsByClassName('codeArea')[0].innerHTML = `<code class="language-python">import requests
+        file = "background.jpg"
+        res = requests.post("https://apis.xditya.me/logo?text=Aditya", files={'image': open(file, "rb")})
+        with open("logo.png", "wb") as response_file:
+            for chunk in res.iter_content(chunk_size=128):
+                response_file.write(chunk)  # The file gets saved as logo.png. View/send it accordingly.
+        response_file.close()</code>`;
+            document.getElementsByClassName('fileName')[0].innerText = "main.py";
+            hljs.highlightAll();
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+
+
+        // Node.JS
+        document.getElementById("node.js").addEventListener("click", () => {
+            document.getElementsByClassName('codeArea')[0].innerHTML = `<code class="language-javascript">const https = require('https');
+        const fs = require('fs');
+            
+        const file = fs.createWriteStream("file.png");
+        http.post("https://apis.xditya.me/logo?text=Aditya", function (response) {
+            response.pipe(file);
+        });</code>`;
+            document.getElementsByClassName('fileName')[0].innerText = "index.js";
+            hljs.highlightAll();
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+
+
+        // Golang
+        document.getElementById("golang").addEventListener("click", () => {
+            document.getElementsByClassName('codeArea')[0].innerHTML = `<code class="language-go">import (
+            "os"
+            "net/http"
+            "io"
+        )
+            
+        func downloadFile(filepath string, url string) (err error) {
+            
+            // Create the file
+            out, err := os.Create(filepath)
+            if err != nil  {
+              return err
+            }
+            defer out.Close()
+            
+            // Get the data
+            resp, err := http.Post(url)
+            if err != nil {
+              return err
+            }
+            defer resp.Body.Close()
+            
+            // Writer the body to file
+            _, err = io.Copy(out, resp.Body)
+            if err != nil  {
+              return err
+            }
+            
+            return nil
+        }
+        
+        // Run It
+        downloadFile("./logo.png", "https://apis.xditya.me/logo?text=Aditya")</code>`;
+            document.getElementsByClassName('fileName')[0].innerText = "main.go";
+            hljs.highlightAll();
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+
+
+        // Dart
+        document.getElementById("dart").addEventListener("click", () => {
+            document.getElementsByClassName('codeArea')[0].innerHTML = `<code class="language-dart">import 'dart:io';
+        void main(List args) async {
+          final client = HttpClient();  // Create a new HttpClient
+          final request = await client.postUrl(Uri.parse('https://apis.xditya.me/logo?text=Aditya'));  // Create a new HttpClientRequest
+          request.headers.set(HttpHeaders.contentTypeHeader, 'application/json; charset=UTF-8');  // Set the headers
+        
+          request.write('{"image": await File("background.jpg").readAsBytes()}');  // Set the body
+        
+          final response = await request.close();  // Get the response
+          response.pipe(File('./logo.png').openWrite());  // Save the response body to a file
+        }</code>`;
+            document.getElementsByClassName('fileName')[0].innerText = "main.dart";
+            hljs.highlightAll();
+            window.scrollTo(0, document.body.scrollHeight);
+        });</script>
+</body>
+
+</html>
