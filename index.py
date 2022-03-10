@@ -7,9 +7,6 @@ cred = credentials.Certificate('1.json')
 default_app = firebase_admin.initialize_app( cred,{'databaseURL':"https://flask-c50a2-default-rtdb.asia-southeast1.firebasedatabase.app/"})
 
 app = Flask(__name__)
-app.secret_key = 'i_iz_noob'
-loop = asyncio.get_event_loop()
-CORS(app)
 
 @app.route('/')
 def home():
@@ -46,6 +43,10 @@ def key():
         "stats":stat
     })
 
+"""
+app.secret_key = 'i_iz_noob'
+loop = asyncio.get_event_loop()
+CORS(app)
 
 @app.route('/Api/carbon/', methods=['GET', 'POST'])
 @app.route('/api/carbon/', methods=['GET', 'POST'])
@@ -203,7 +204,6 @@ class carbon:
         return True
 
 
-"""
 @app.route('/Gen/<string:n>')
 def gen(n):
     key="".join(n[0:8])
