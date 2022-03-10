@@ -1,0 +1,19 @@
+@media only screen and (max-width : 770px) {
+    div {
+        margin-left: 15px;
+    }
+    code, .fileName {
+        margin-right: 15px;
+        overflow: scroll;
+    }
+    pre {
+        margin-right: auto;
+        overflow: scroll;
+    }
+    h2 {
+        font-size: 1.5rem;
+    }
+    a, a:active {
+        font-size: 1rem;
+    }
+}
