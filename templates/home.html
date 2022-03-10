@@ -1,0 +1,587 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+                                        <!-- Favicon Image link -->
+  <link rel="icon" type="image/x-icon" href="https://avatars.githubusercontent.com/u/79676239?s=400&u=50ed13d45e13500fd65b3b84b4f64276d6313ea8&v=4">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <title>About Ishan Singla</title>  <!-- Page Title -->
+  
+</head>
+
+<body>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Hind+Madurai&family=Poppins:wght@200&display=swap');
+:root{
+    --primary: white;
+    --secondary: black;
+    --bg : url("https://telegra.ph/file/dfb170b0e7fb27b6c2e9f.jpg");
+    --con: rgb(243, 21, 21);
+    --lbg: url("https://telegra.ph/file/59ce4d4f7fb61703c534e.jpg");
+    --icons: white;
+    --i-hover: red;
+    --border: 4px solid rgb(255, 77, 77);
+    --btn-color: red;
+    --menu: white;
+}
+
+*{
+    padding: 0;
+    margin: 0;    
+}
+
+body{
+    min-height: 110vh;
+    background: var(--bg);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    -webkit-background-size: 100%;
+    -moz-background-size: 100%;
+    -o-background-size: 100%;  
+}
+
+.dmode{
+    --primary: black;
+    --secondary: #fff;
+    --bg: url("https://telegra.ph/file/59ce4d4f7fb61703c534e.jpg");
+    --icons: #c4c4c4;
+    --i-hover: #4facfe;
+    --menu:#4facfe;
+    --con: linear-gradient(to top, #00f2fe, #4facfe);
+    --border: 4px solid #00f2fe;
+    --btn-color: linear-gradient(to right, #4facfe 0%, #00f2fe 140%);
+}
+
+.main{
+    align-items: center;
+    justify-content: center;
+}
+.container{
+    background-color: var(--secondary);
+    width: 390px;
+    height: 500px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: 50px;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+}
+
+.top{
+    width: 390px;
+    height: 270px;
+    background: var(--con);
+    clip-path: circle(400px at 50% -48.5%);
+    border-radius: 5px;
+}
+.k-wrap{
+    position: relative;
+    display: inline-block;
+    margin-top: 2px;
+    margin-left: 2px;
+}
+
+.menu{
+    left: 20px;
+    top: 20px;
+    width:40px;
+    height:30px;
+    position: relative;
+    cursor: pointer;
+    background: transparent;
+}
+
+.menu > div{
+    position: absolute;
+    height:3px;
+    background: var(--secondary);
+    border-radius: 5px;
+    transition: width 0.1s ease;
+    
+}
+
+.menu-li{
+    display: none;
+    position: absolute;
+    background-color: var(--secondary);
+    min-width: 120px;
+    margin-top: 10px;
+    margin-left: 20px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 5px;
+}
+
+.menu-li a{
+    color: var(--menu);
+    padding: 6px 20px;
+    text-decoration: none;
+    display: block;
+    font-family: 'Hind Madurai', sans-serif;;
+}
+
+.show {display: block;}
+.a{
+    width: 23px;
+}
+.b{
+    width: 16px;
+    top: 8px;
+}
+.c{
+    width: 23px;
+    top: 16px;
+}
+
+.menu:hover div{
+    width: 25px;
+    transition: width 0.1s ease;
+}
+.email{
+    position: absolute;
+    font-size: 23px;
+    top: 22px;
+    right: 20px;
+}
+.email i{
+    color: var(--secondary);
+}
+.image__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size:36px;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    color: #ffffff;
+    font-family: 'Quicksand', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 10;
+    transition: opacity 0.25s;
+}
+
+.image__overlay--primary {
+    background: transparent;
+    opacity: 0;
+}
+
+.image__overlay > * {
+    transform: translateY(20px);
+    transition: transform 0.25s;
+}
+
+.image__overlay:hover {
+    size: 0px;
+    opacity: 1;
+}
+
+.image__overlay:hover > * {
+    transform: translateY(0);
+}
+.logo{
+    position: absolute;
+    width: 110px;
+    height: 110px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -160%);
+    border-radius: 50%;
+    border: var(--border);
+}
+
+.logo img{
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+}
+
+.name{
+    font-family: 'Hind Madurai', sans-serif;;
+    text-align: center;
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: 10px;
+    transform: translate(-50%, -150%);
+}
+
+.bottom{
+    padding: 20px;
+}
+.details{
+    display: block;
+    font-family: 'Hind Madurai', sans-serif;;
+    width: 50px;
+    height: 50px;
+    color: var(--primary);
+    margin-left: 15px;
+}
+
+hr{
+    width: 35px;
+    border: 2px solid var(--primary);
+    border-radius: 2px;
+}
+
+.info {
+    font-size: 15px;
+    font-family: 'Hind Madurai', sans-serif;
+    color: var(--icons);
+}
+.info:hover{
+    color: var(--i-hover);
+}
+.social {
+    margin-left: 15px;
+    margin-top: 50px;
+    font-size: x-large;
+    text-decoration: none;   
+}
+
+.social a i{
+    color: var(--icons);
+    margin-right: 10px;
+}
+.social a i:hover{
+    color: var(--i-hover);
+}
+
+.btns{
+    display: flex;
+    margin-top: 15px;
+    margin-left: 15px;
+    width: 185px;
+    height: 50px;
+}
+
+.btn1{
+    display: flex;
+    height: 35px;
+    width: 90px;
+    background: var(--btn-color);
+    border-radius: 20px;
+    text-align: center;
+    border: none;
+    margin-right: 5px;
+}
+
+
+.follow, .more{
+    font-size: smaller;
+    text-decoration: none;
+    margin: auto;
+    font-family: 'Hind Madurai', sans-serif;;
+}
+.follow{
+    color: var(--secondary);
+}
+.btn1:hover{
+    width: 120px;
+}
+.btn2{
+    display: flex;
+    height: 33px;
+    width: 90px;
+    background-color: transparent;
+    border-radius: 20px;
+    border: 2px solid var(--i-hover);
+    text-align: center;
+    right:0;
+    top: 0;
+}
+.more{
+    color: var(--i-hover);
+}
+.btn2:hover{
+    width: 120px;
+}
+.wrapper {
+    position: absolute;
+    left: 0;
+    top: 5px;
+    margin-left: -90px;
+    transform: scale(.6);
+    margin-bottom: 10px;
+}
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 100px;
+  margin-left: 100px;
+  padding: 4px;
+  border-radius: 40px;
+}
+.toggle:before, .toggle:after {
+  content: '';
+  display: table;
+}
+.toggle:after {
+  clear: both;
+}
+.toggle-bg {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: 100%;
+  height: 100%;
+  background-color: #c0e6f6;
+  border-radius: 40px;
+  border: 4px solid #81c0d5;
+  transition: all 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.toggle-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 1px solid red;
+  border-radius: 40px;
+  z-index: 2;
+  opacity: 0;
+}
+.toggle-switch {
+  top: 2px;
+  left: 4px;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  margin-left: 50px;
+  background-color: #f5eb42;
+  border: 4px solid #e4c74d;
+  border-radius: 50%;
+  transition: all 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+     transform: translate(-4px,-4px);
+}
+.toggle-switch-figure {
+  position: absolute;
+  bottom: -14px;
+  left: -50px;
+  display: block;
+  width: 80px;
+  height: 30px;
+  border: 8px solid #d4d4d2;
+  border-radius: 20px;
+  background-color: #fff;
+  transform: scale(0.4);
+  transition: all 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.toggle-switch-figure:after {
+  content: '';
+  display: block;
+  position: relative;
+  top: -65px;
+  right: -42px;
+  width: 15px;
+  height: 15px;
+  border: 8px solid #d4d4d2;
+  border-radius: 100%;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  transform: rotateZ(70deg);
+  background-color: #fff;
+}
+.toggle-switch-figure:before {
+  content: '';
+  display: block;
+  position: relative;
+  top: -25px;
+  right: -10px;
+  width: 30px;
+  height: 30px;
+  border: 8px solid #d4d4d2;
+  border-radius: 100%;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  transform: rotateZ(30deg);
+  background-color: #fff;
+}
+.toggle-switch-figureAlt {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 2px;
+  width: 2px;
+  height: 2px;
+  background-color: #efeeda;
+  border-radius: 100%;
+  border: 4px solid #dee1c5;
+  box-shadow: 42px -7px 0 -3px #fcfcfc, 75px -10px 0 -3px #fcfcfc, 54px 4px 0 -4px #fcfcfc, 83px 7px 0 -2px #fcfcfc, 63px 18px 0 -4px #fcfcfc, 44px 28px 0 -2px #fcfcfc, 78px 23px 0 -3px #fcfcfc;
+  transition: all 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: scale(0);
+}
+.toggle-switch-figureAlt:before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 18px;
+  width: 7px;
+  height: 7px;
+  background-color: #efeeda;
+  border-radius: 100%;
+  border: 4px solid #dee1c5;
+}
+.toggle-switch-figureAlt:after {
+  content: '';
+  position: absolute;
+  top: 19px;
+  left: 15px;
+  width: 2px;
+  height: 2px;
+  background-color: #efeeda;
+  border-radius: 100%;
+  border: 4px solid #dee1c5;
+}
+.toggle-input:checked ~ .toggle-switch {
+  margin-left: 0;
+  border-color: #dee1c5;
+  background-color: #fffdf2;
+}
+.toggle-input:checked ~ .toggle-bg {
+  background-color: #484848;
+  border-color: #202020;
+}
+.toggle-input:checked ~ .toggle-switch .toggle-switch-figure {
+  margin-left: 40px;
+  opacity: 0;
+  transform: scale(0.1);
+}
+.toggle-input:checked ~ .toggle-switch .toggle-switch-figureAlt {
+  transform: scale(1);
+}
+
+
+@media only screen and (max-width: 600px){
+    .container,.top{
+        width: 320px;
+    }
+    .menu{
+        height: 40px;
+    }
+    .btns{
+        width: 100%;
+    }
+    .btn1 {
+        width: 120px;
+    }
+    .btn2 {
+        width: 120px;
+    }
+}
+    </style>
+  <div class="wrapper">
+    <div class="toggle">
+      <input class="toggle-input" type="checkbox" />
+      <div class="toggle-bg"></div>
+      <div class="toggle-switch">
+        <div class="toggle-switch-figure"></div>
+        <div class="toggle-switch-figureAlt"></div>
+      </div>
+    </div>
+  </div>
+  <section class="main">
+    <div class="container">
+      <div class="top">
+        <div class="k-wrap">
+          <div class="menu">
+            <div class="a"></div>
+            <div class="b"></div>
+            <div class="c"></div>
+          </div>
+          <!-- Nav Bar Start -->
+          <div id="menu-list" class="menu-li">
+            <a href="https://twitter.com/IshanSingla_xD">Twitter</a>
+            <a href="https://instagram.com/Is_Ishan_Singla">Instagram</a>
+            <a href="https://www.linkedin.com/in/itz-ishansingla">Linkedin</a>
+            <a href="https://github.com/IshanSingla">Github</a>
+            <a href="https://www.youtube.com/c/IshanSingla">You Tube</a>
+          </div>
+        </div>
+        <div class="email">
+          <!-- Email ID here -->
+          <a href="mailto:is.ishan.singla@gmail.com"><i class="far fa-envelope"></i></a>
+        </div>
+        <div class="logo">
+          <!-- LOGO Here -->
+          <a href="https://github.com/IshanSingla">
+            <img id="ishan" src="https://telegra.ph/file/bc7c99222655447fe0700.jpg">
+            <div class="image__overlay image__overlay--primary">
+              <i class="fas fa-code"></i>
+            </div>
+          </a>
+        </div>
+
+        <div class="name">
+          <h2>Ishan Singla</h2>
+          <p>@IshanSingla</p>
+          
+        </div>
+      </div>
+      <div class="bottom">
+        <div class="details">
+          <h2>About</h2>
+          <hr>
+          <br>
+          <pre><p class="info" >Python Developer |•| Android Devloper |•|</p></pre>
+          
+        </div>
+        <div class="social">
+          <a href="https://twitter.com/IshanSingla_xD"><i class="fab fa-twitter"></i></a>
+          <a href="https://instagram.com/Is_Ishan_Singla"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.linkedin.com/in/itz-ishansingla"><i class="fab fa-linkedin"></i></a>
+          <a href="https://github.com/IshanSingla"><i class="fab fa-github"></i></a>
+          <a href="https://www.youtube.com/c/IshanSingla"><i class="fab fa-youtube"></i></a>
+        </div>
+        <div class="btns">
+          <div class="btn1"><a class="follow" href="https://github.com/IshanSingla" target="_blank">FOLLOW</a></div>
+          <div class="btn2"><a class="more" href="api" target="_blank">MORE</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+<script>
+  $(function () {
+  $(".menu").click(function () {
+    document.getElementById("menu-list").classList.toggle("show");
+  });
+  window.onclick = function (event) {
+    if (!event.target.matches('.menu')) {
+      var dropdowns = document.getElementsByClassName("menu-li");
+      var i;
+      for (i = 0; i < dropdowns.length; i++) {
+        var openDropdown = dropdowns[i];
+        if (openDropdown.classList.contains('show')) {
+          openDropdown.classList.remove('show');
+        }
+      }
+    }
+  }
+  $('.toggle-input')[0].checked = true;
+  const checkbox = document.querySelector('.toggle-input');
+
+  checkbox.addEventListener('change', () => {
+    document.body.classList.toggle('dmode');
+    if (document.getElementById('ishan').src=="https://telegra.ph/file/bc7c99222655447fe0700.jpg") {
+    document.getElementById('ishan').src="https://avatars.githubusercontent.com/u/79676239?s=400&u=50ed13d45e13500fd65b3b84b4f64276d6313ea8&v=4"}
+    else{
+      document.getElementById('ishan').src="https://telegra.ph/file/bc7c99222655447fe0700.jpg"
+    }
+  });
+});
+</script>
+</html>

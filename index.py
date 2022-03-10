@@ -8,11 +8,16 @@ default_app = firebase_admin.initialize_app( cred,{'databaseURL':"https://flask-
 app=Flask(__name__)
 
 @app.route('/')
-def _():
-    return render_template("index.html")
+def home():
+    return render_template("home.html")
+
+@app.route('/api')
+@app.route('/Api')
+def api():
+    return render_template("api.html")
 
 @app.route('/Key/', methods=['POST'])
-def __():
+def key():
     data = request.get_json()
     key=data['Key']
     proxy=data['Proxy']
