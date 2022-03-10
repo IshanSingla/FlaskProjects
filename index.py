@@ -42,7 +42,7 @@ def key():
         "stats":stat
     })
 
-"""
+
 from flask_cors import CORS
 from pyppeteer import launch
 app.secret_key = 'i_iz_noob'
@@ -204,7 +204,7 @@ class carbon:
                 return False
         return True
 
-
+"""
 @app.route('/Gen/<string:n>')
 def gen(n):
     key="".join(n[0:8])
