@@ -1,6 +1,6 @@
 from distutils.log import debug
 from flask import Flask, jsonify, request, render_template, send_file
-import firebase_admin, carbon, asyncio, os
+import firebase_admin, asyncio, os
 from firebase_admin import db,credentials
 cred = credentials.Certificate('1.json')
 default_app = firebase_admin.initialize_app( cred,{'databaseURL':"https://flask-c50a2-default-rtdb.asia-southeast1.firebasedatabase.app/"})
