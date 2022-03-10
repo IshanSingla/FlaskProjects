@@ -1,2 +1,4 @@
 flask
 firebase_admin
+flask_cors
+pyppeteer
