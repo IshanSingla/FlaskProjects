@@ -1,6 +1,5 @@
-from distutils.log import debug
-from flask import Flask, jsonify, request, render_template
-import firebase_admin
+from flask import Flask, jsonify, request, render_template, send_file
+import firebase_admin, carbon, asyncio, os
 from firebase_admin import db,credentials
 cred = credentials.Certificate('1.json')
 default_app = firebase_admin.initialize_app( cred,{'databaseURL':"https://flask-c50a2-default-rtdb.asia-southeast1.firebasedatabase.app/"})
@@ -43,6 +42,28 @@ def key():
     })
 
 
+@app.route('/Api/carbon/', methods=['GET', 'POST'])
+@app.route('/api/carbon/', methods=['GET', 'POST'])
+@app.route('/Api/Carbon/', methods=['GET', 'POST'])
+@app.route('/api/Carbon/', methods=['GET', 'POST'])
+def home():
+    data = None
+    if request.method == "POST":
+        data = request.json
+        try:
+            code = data['code']
+        except KeyError:
+            return jsonify({"error": "Code is required to create a Carbon!"})
+    else:
+        code = request.args.get('code')
+        if code is None:
+            return jsonify({"error": "Code is required to create a Carbon!"})
+        data = request.args
+    try:
+        carbon.get_response(carbon.createURLString(carbon.validateBody(data)), (os.getcwd() + '/carbon_screenshot.png'))
+        return send_file((os.getcwd() + '/carbon_screenshot.png'), mimetype='image/png')
+    except Exception as e:
+        return jsonify({"error": e})
 
 """
 @app.route('/Gen/<string:n>')
