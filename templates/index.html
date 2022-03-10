@@ -12,10 +12,119 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/androidstudio.min.css"
         integrity="sha512-1XN5rnQ4rhaGEfX3nlDJ4Hb7kKNMAi0+DWQ/cNf54tuuTGSs0Wyw6mbgzVxLUCQ+vxSpmzr4j87ROim2ChrYnA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="styleMobile.css">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2167251825126678"
      crossorigin="anonymous"></script>
+     <style>
+         body {
+    margin: 0;
+    padding: 0;
+    background: black;
+    color: #fc5866;
+    user-select: none;
+}
+h1 {
+    font-size: 2.75rem;
+    font-weight: bolder;
+    text-align: center;
+    margin: 0;
+    font-family: 'Product Sans', sans-serif;
+    padding: 0;
+    color: #ededed;
+    text-decoration: underline;
+}
+div {
+    margin-left: 5rem;
+}
+code, pre {
+    margin-right: 3.06em;
+    overflow: hidden;
+    user-select: text;
+}
+span#reqType {
+    color: plum;
+    padding-left: .5rem;
+    padding-right: .5rem;
+}
+h2 {
+    font-weight: bold;
+    color: white;
+    font-size: 4rem;
+    font-family: 'Product Sans', sans-serif;
+}
+a, a:active {
+    color: rgb(126, 223, 223);
+    text-decoration: none;
+    font-size: 1.5em;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+ul {
+    list-style: none;
+}
+li:before {
+    content: "•";
+    font-size: 175%;
+    padding-right: 1.5rem;
+}
+footer {
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 48px;
+    font-size: 1.5rem;
+    text-align: center;
+    color: #ededed;
+    font-family: 'Product Sans', sans-serif;
+}
+code::selection, code span::selection {
+    background: rgba(186, 255, 255, 0.253);
+}
+.fileName {
+    text-align: center;
+    font-size: 1.5rem;
+    font-family: 'Product Sans', sans-serif;
+    background-color: #282b2e;
+    margin-right: 5rem;
+    margin-left: 0;
+    margin-top: .5rem;
+    padding-top: 5px;
+    color: palegreen;
+}
+pre {
+    margin-top: 0;
+}
+button {
+    background: #2e2e2e;
+    color: whitesmoke;
+    border: none;
+    border-radius: 2.5px;
+    padding: .5rem;
+    font-size: 1rem;
+    font-family: 'Product Sans', sans-serif;
+}
+
+     </style>
+     <style>
+         @media only screen and (max-width : 770px) {
+    div {
+        margin-left: 15px;
+    }
+    code, .fileName {
+        margin-right: 15px;
+        overflow: scroll;
+    }
+    pre {
+        margin-right: auto;
+        overflow: scroll;
+    }
+    h2 {
+        font-size: 1.5rem;
+    }
+    a, a:active {
+        font-size: 1rem;
+    }
+}
+
+     </style>
 </head>
 
 <body>
@@ -23,39 +132,39 @@
     <div>
         <h2>Morse Code [<span id="reqType">GET</span>]</h2>
         <ul>
-            <li><a href="https://apis.xditya.me/morse/encode?text=sampleText"
+            <li><a href="https://apis.induced.me/morse/encode?text=sampleText"
                     target="_blank">/morse/encode?text=sampleText</a></li>
-            <li><a href="https://apis.xditya.me/morse/decode?text=.. .- -- .--. .-.. . -- --- .-. ... . -.-. --- -.."
+            <li><a href="https://apis.induced.me/morse/decode?text=.. .- -- .--. .-.. . -- --- .-. ... . -.-. --- -.."
                     target="_blank">/morse/decode?text=.. .- --</a></li>
         </ul>
     </div>
     <div>
         <h2>QR Code [<span id="reqType">GET</span>]</h2>
         <ul>
-            <li><a href="https://apis.xditya.me/qr/gen?text=sampleText" target="_blank">/qr/gen?text=sampleText</a></li>
+            <li><a href="https://apis.induced.me/qr/gen?text=sampleText" target="_blank">/qr/gen?text=sampleText</a></li>
         </ul>
     </div>
     <div>
         <h2>Lyrics [<span id="reqType">GET</span>]</h2>
         <ul>
-            <li><a href="https://apis.xditya.me/lyrics?song=blinding+lights"
+            <li><a href="https://apis.induced.me/lyrics?song=blinding+lights"
                     target="_blank">/lyrics?song=blinding+lights</a></li>
         </ul>
     </div>
     <div>
         <h2>Notes Generator [<span id="reqType">GET</span>]</h2>
         <ul>
-            <li><a href="https://apis.xditya.me/write?text=someTextHere" target="_blank">/write?text=someTextHere</a>
+            <li><a href="https://apis.induced.me/write?text=someTextHere" target="_blank">/write?text=someTextHere</a>
             </li>
         </ul>
     </div>
     <div>
         <h2>Captcha Generator [<span id="reqType">GET</span>]</h2>
         <ul>
-            <li><a href="https://apis.xditya.me/captcha" target="_blank">/captcha</a>
+            <li><a href="https://apis.induced.me/captcha" target="_blank">/captcha</a>
             </li>
             <li>
-                <a href="https://apis.xditya.me/captcha?options=6&length=5"
+                <a href="https://apis.induced.me/captcha?options=6&length=5"
                     target="_blank">/captcha?options=6&length=5</a>
             </li>
         </ul>
@@ -63,7 +172,7 @@
     <div>
         <h2>Logo Generator [<span id="reqType">POST</span>]</h2>
         <ul>
-            <li><a href="https://apis.xditya.me/logo?text=Aditya" target="_blank">/logo?text=Aditya</a></li>
+            <li><a href="https://api.induced.me/logo?text=Aditya" target="_blank">/logo?text=Aditya</a></li>
         </ul>
         <div class="codeBtns">
             <button id="python">Python</button>
@@ -76,7 +185,7 @@
         <button id="copyCode" data-clipboard-action="copy" data-clipboard-target=".codeArea">Copy Code</button>
     </div>
     <footer>
-        <p>Made with 💖 by <a href="https://telegram.dog/BotzHub" target="_blank">BotzHub</a></p>
+        <p>Made with 💖 by <a href="https://telegram.dog/InducedBots" target="_blank">InducedBots</a></p>
     </footer>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/languages/dart.min.js"
@@ -118,7 +227,7 @@ void main(List args) async {
         document.getElementById("python").addEventListener("click", () => {
             document.getElementsByClassName('codeArea')[0].innerHTML = `<code class="language-python">import requests
         file = "background.jpg"
-        res = requests.post("https://apis.xditya.me/logo?text=Aditya", files={'image': open(file, "rb")})
+        res = requests.post("https://apis.induced.me/logo?text=Aditya", files={'image': open(file, "rb")})
         with open("logo.png", "wb") as response_file:
             for chunk in res.iter_content(chunk_size=128):
                 response_file.write(chunk)  # The file gets saved as logo.png. View/send it accordingly.
@@ -135,7 +244,7 @@ void main(List args) async {
         const fs = require('fs');
             
         const file = fs.createWriteStream("file.png");
-        http.post("https://apis.xditya.me/logo?text=Aditya", function (response) {
+        http.post("https://apis.induced.me/logo?text=Aditya", function (response) {
             response.pipe(file);
         });</code>`;
             document.getElementsByClassName('fileName')[0].innerText = "index.js";
@@ -178,7 +287,7 @@ void main(List args) async {
         }
         
         // Run It
-        downloadFile("./logo.png", "https://apis.xditya.me/logo?text=Aditya")</code>`;
+        downloadFile("./logo.png", "https://apis.induced.me/logo?text=Aditya")</code>`;
             document.getElementsByClassName('fileName')[0].innerText = "main.go";
             hljs.highlightAll();
             window.scrollTo(0, document.body.scrollHeight);
@@ -190,7 +299,7 @@ void main(List args) async {
             document.getElementsByClassName('codeArea')[0].innerHTML = `<code class="language-dart">import 'dart:io';
         void main(List args) async {
           final client = HttpClient();  // Create a new HttpClient
-          final request = await client.postUrl(Uri.parse('https://apis.xditya.me/logo?text=Aditya'));  // Create a new HttpClientRequest
+          final request = await client.postUrl(Uri.parse('https://apis.induced.me/logo?text=Aditya'));  // Create a new HttpClientRequest
           request.headers.set(HttpHeaders.contentTypeHeader, 'application/json; charset=UTF-8');  // Set the headers
         
           request.write('{"image": await File("background.jpg").readAsBytes()}');  // Set the body

@@ -1,3 +1,4 @@
+from distutils.log import debug
 from flask import Flask, jsonify, request, render_template
 import firebase_admin
 from firebase_admin import db,credentials
@@ -61,4 +62,4 @@ def Clear(n):
 """
 
 if __name__ == "__main__":
-    app.run(use_reloader=True, threaded=True)
+    app.run(debug=True,use_reloader=True, threaded=True)
