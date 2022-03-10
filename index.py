@@ -1,10 +1,14 @@
 from flask import Flask, jsonify, request, render_template, send_file
 import firebase_admin, carbon, asyncio, os
 from firebase_admin import db,credentials
+from flask_cors import CORS
 cred = credentials.Certificate('1.json')
 default_app = firebase_admin.initialize_app( cred,{'databaseURL':"https://flask-c50a2-default-rtdb.asia-southeast1.firebasedatabase.app/"})
 
 app=Flask(__name__)
+app.secret_key = 'i_iz_noob'
+loop = asyncio.get_event_loop()
+CORS(app)
 
 @app.route('/')
 def home():
@@ -60,7 +64,7 @@ def home():
             return jsonify({"error": "Code is required to create a Carbon!"})
         data = request.args
     try:
-        carbon.get_response(carbon.createURLString(carbon.validateBody(data)), (os.getcwd() + '/carbon_screenshot.png'))
+        loop.run_until_complete(carbon.get_response(carbon.createURLString(carbon.validateBody(data)), (os.getcwd() + '/carbon_screenshot.png')))
         return send_file((os.getcwd() + '/carbon_screenshot.png'), mimetype='image/png')
     except Exception as e:
         return jsonify({"error": e})
@@ -91,4 +95,4 @@ def Clear(n):
 """
 
 if __name__ == "__main__":
-    app.run(debug=True,use_reloader=True, threaded=True)
+    app.run(use_reloader=True, threaded=True)
