@@ -16,7 +16,10 @@ def home():
 def api():
     return render_template("api.html")
 
-@app.route('/Key/', methods=['POST'])
+@app.route('/Api/key/', methods=['POST'])
+@app.route('/api/key/', methods=['POST'])
+@app.route('/Api/Key/', methods=['POST'])
+@app.route('/api/Key/', methods=['POST'])
 def key():
     data = request.get_json()
     key=data['Key']
