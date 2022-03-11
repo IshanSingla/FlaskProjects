@@ -68,7 +68,7 @@ def home():
         return send_file((os.getcwd() + '/carbon_screenshot.png'), mimetype='image/png')
     except Exception as e:
         return jsonify({"error": e})
-
+"""
 
 defaultOptions = {
         "backgroundColor": "rgba(171, 184, 195, 1)",
@@ -185,7 +185,7 @@ async def get_response(body_, path):
         return (path)
 
 
-
+"""
 
 @app.route('/Gen/<string:n>')
 def gen(n):
