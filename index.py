@@ -31,14 +31,14 @@ def key():
             key=data['Key']
             proxy=data['Proxy']
         except KeyError:
-            stat="Invalid Method"
+            return jsonify({"error": "Key/Proxy is required"})
     else:
         key = request.args.get('Key')
         if key is None:
-            stat="Key is required"
+            return jsonify({"error": "Key/Proxy is required"})
         proxy = request.args.get('Proxy')
         if proxy is None:
-            stat="Proxy is required"
+            return jsonify({"error": "Key/Proxy is required"})
     Keys = (db.reference(f"/Key/")).get()
     if key in Keys:
         proxys = (db.reference(f"/Proxy/{key}/")).get()
@@ -52,7 +52,7 @@ def key():
                 pro= (db.reference(f"/Proxy/{key}/")).set(proxys)
             stat="Done"
     else:
-        stat="Invalid"
+        stat="Key is Invalid"
     return jsonify({
         "stats":stat
     })
