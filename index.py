@@ -94,16 +94,18 @@ def morse():
     if not encode==None:
         result = encrypt(encode.upper())
         return jsonify({
-            "encript": f"{result}",
+            "word": f"{encode}",
+            "morse": f"{result}",
             })
     elif not decode==None:
         result = decrypt(decode)
         return jsonify({
-            "decrypt": f"{result}",
+            "word": f"{decode}",
+            "morse": f"{result}",
             })
     else:
         return jsonify({
-            "error": "No Para Meter given",
+            "error": "No Parameter given",
             })
 
 
