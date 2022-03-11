@@ -1,12 +1,16 @@
-from distutils.log import debug
 from flask import Flask, jsonify, request, render_template, send_file
 import firebase_admin, asyncio, os
 from firebase_admin import db,credentials
+from flask_cors import CORS
+from pyppeteer import launch
+
 cred = credentials.Certificate('1.json')
 default_app = firebase_admin.initialize_app( cred,{'databaseURL':"https://flask-c50a2-default-rtdb.asia-southeast1.firebasedatabase.app/"})
 
 app = Flask(__name__)
-
+app.secret_key = 'i_iz_noob'
+loop = asyncio.get_event_loop()
+CORS(app)
 @app.route('/')
 def home():
     return render_template("home.html")
@@ -41,13 +45,6 @@ def key():
     return jsonify({
         "stats":stat
     })
-
-
-from flask_cors import CORS
-from pyppeteer import launch
-app.secret_key = 'i_iz_noob'
-loop = asyncio.get_event_loop()
-CORS(app)
 """
 @app.route('/Api/carbon/', methods=['GET', 'POST'])
 @app.route('/api/carbon/', methods=['GET', 'POST'])
