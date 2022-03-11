@@ -66,7 +66,8 @@ def carbon():
         loop.run_until_complete(get_response(data, (os.getcwd() + '/carbon_screenshot.png')))
         return send_file((os.getcwd() + '/carbon_screenshot.png'), mimetype='image/png')
     except Exception as e:
-        return jsonify({"error": e})
+        ish=str(e)
+        return jsonify({"error": ish})
 
 defaultOptions = {
         "backgroundColor": "rgba(171, 184, 195, 1)",
