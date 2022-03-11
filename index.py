@@ -75,26 +75,37 @@ def carbon():
         ish=str(e)
         return jsonify({"error": ish})
 
-@app.route('/api/morse/', methods=['GET', 'POST'])
+@app.route('/api/morse/', methods=['GET','POST'])
 def morse():
-    data = None
     if request.method == "POST":
-        data = request.json
+        data = request.get_json()
         try:
-            code = data['text']
+            encode=data['encode']
         except KeyError:
-            return jsonify({"error": "Code is required to create a Carbon!"})
+            encode=None
+        try:
+            decode=data['decode']
+        except KeyError:
+            decode=None
     else:
-        code = request.args.get('code')
-        if code is None:
-            return jsonify({"error": "Code is required to create a Carbon!"})
-        data = request.args
-    try:
-        loop.run_until_complete(get_response(data, (os.getcwd() + '/carbon_screenshot.png')))
-        return send_file((os.getcwd() + '/carbon_screenshot.png'), mimetype='image/png')
-    except Exception as e:
-        ish=str(e)
-        return jsonify({"error": ish})
+        encode= request.args.get('encode')
+        decode= request.args.get('decode')
+
+    if not encode==None:
+        result = encrypt(encode.upper())
+        return jsonify({
+            "encript": f"{result}",
+            })
+    elif not decode==None:
+        result = decrypt(decode)
+        return jsonify({
+            "decrypt": f"{result}",
+            })
+    else:
+        return jsonify({
+            "error": "No Para Meter given",
+            })
+
 
 
 
@@ -230,6 +241,62 @@ async def get_response(body_, path):
         await browser.close()
         return (path)
 
+MORSE_CODE_DICT = { 'A':'.-', 'B':'-...',
+
+                    'C':'-.-.', 'D':'-..', 'E':'.',
+
+                    'F':'..-.', 'G':'--.', 'H':'....',
+
+                    'I':'..', 'J':'.---', 'K':'-.-',
+
+                    'L':'.-..', 'M':'--', 'N':'-.',
+
+                    'O':'---', 'P':'.--.', 'Q':'--.-',
+
+                    'R':'.-.', 'S':'...', 'T':'-',
+
+                    'U':'..-', 'V':'...-', 'W':'.--',
+
+                    'X':'-..-', 'Y':'-.--', 'Z':'--..',
+
+                    '1':'.----', '2':'..---', '3':'...--',
+
+                    '4':'....-', '5':'.....', '6':'-....',
+
+                    '7':'--...', '8':'---..', '9':'----.',
+
+                    '0':'-----', ', ':'--..--', '.':'.-.-.-',
+
+                    '?':'..--..', '/':'-..-.', '-':'-....-',
+
+                    '(':'-.--.', ')':'-.--.-'}
+
+def encrypt(message):
+    cipher = ''
+    for letter in message:
+        if letter != ' ':
+            cipher += MORSE_CODE_DICT[letter] + ' '
+        else:
+            cipher += ' '
+    return cipher
+
+def decrypt(message):
+    message += ' '
+    decipher = ''
+    citext = ''
+    for letter in message:
+        if (letter != ' '):
+            i = 0
+            citext += letter
+        else:
+            i += 1
+            if i == 2 :
+                decipher += ' '
+            else:
+                decipher += list(MORSE_CODE_DICT.keys())[list(MORSE_CODE_DICT
+                .values()).index(citext)]
+                citext = ''
+    return decipher
 
 """
 
