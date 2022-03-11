@@ -63,8 +63,8 @@ def carbon():
             return jsonify({"error": "Code is required to create a Carbon!"})
         data = request.args
     try:
-        loop.run_until_complete(get_response(data, (os.getcwd() + '/templates/carbon_screenshot.png')))
-        return send_file((os.getcwd() + '/templates/carbon_screenshot.png'), mimetype='image/png')
+        loop.run_until_complete(get_response(data, (os.getcwd() + '/carbon_screenshot.png')))
+        return send_file((os.getcwd() + '/carbon_screenshot.png'), mimetype='image/png')
     except Exception as e:
         return jsonify({"error": e})
 
