@@ -45,12 +45,11 @@ def key():
     return jsonify({
         "stats":stat
     })
-"""
 @app.route('/Api/carbon/', methods=['GET', 'POST'])
 @app.route('/api/carbon/', methods=['GET', 'POST'])
 @app.route('/Api/Carbon/', methods=['GET', 'POST'])
 @app.route('/api/Carbon/', methods=['GET', 'POST'])
-def home():
+def carbon():
     data = None
     if request.method == "POST":
         data = request.json
@@ -64,11 +63,10 @@ def home():
             return jsonify({"error": "Code is required to create a Carbon!"})
         data = request.args
     try:
-        loop.run_until_complete(get_response(data, (os.getcwd() + '/carbon_screenshot.png')))
-        return send_file((os.getcwd() + '/carbon_screenshot.png'), mimetype='image/png')
+        loop.run_until_complete(get_response(data, (os.getcwd() + '/templates/carbon_screenshot.png')))
+        return send_file((os.getcwd() + '/templates/carbon_screenshot.png'), mimetype='image/png')
     except Exception as e:
         return jsonify({"error": e})
-"""
 
 defaultOptions = {
         "backgroundColor": "rgba(171, 184, 195, 1)",
