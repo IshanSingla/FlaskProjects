@@ -25,9 +25,20 @@ def api():
 @app.route('/Api/Key/', methods=['POST'])
 @app.route('/api/Key/', methods=['POST'])
 def key():
-    data = request.get_json()
-    key=data['Key']
-    proxy=data['Proxy']
+    if request.method == "POST":
+        data = request.get_json()
+        try:
+            key=data['Key']
+            proxy=data['Proxy']
+        except KeyError:
+            stat="Invalid Method"
+    else:
+        key = request.args.get('Key')
+        if key is None:
+            stat="Key is required"
+        proxy = request.args.get('Proxy')
+        if proxy is None:
+            stat="Proxy is required"
     Keys = (db.reference(f"/Key/")).get()
     if key in Keys:
         proxys = (db.reference(f"/Proxy/{key}/")).get()
@@ -62,6 +73,10 @@ def carbon():
         if code is None:
             return jsonify({"error": "Code is required to create a Carbon!"})
         data = request.args
+<<<<<<< HEAD
+=======
+
+>>>>>>> a609ce2 (ishan)
     try:
         loop.run_until_complete(get_response(data, (os.getcwd() + '/carbon_screenshot.png')))
         return send_file((os.getcwd() + '/carbon_screenshot.png'), mimetype='image/png')
@@ -90,6 +105,7 @@ defaultOptions = {
         "windowControls": True,
         "windowTheme": None,
     }
+<<<<<<< HEAD
 
 optionToQueryParam = {
         "backgroundColor": "bg",
@@ -113,6 +129,31 @@ optionToQueryParam = {
         "windowTheme": "wt",
     }
 
+=======
+
+optionToQueryParam = {
+        "backgroundColor": "bg",
+        "code": "code",
+        "dropShadow": "ds",
+        "dropShadowBlurRadius": "dsblur",
+        "dropShadowOffsetY": "dsyoff",
+        "exportSize": "es",
+        "fontFamily": "fm",
+        "firstLineNumber": "fl",
+        "fontSize": "fs",
+        "language": "l",
+        "lineNumbers": "ln",
+        "paddingHorizontal": "ph",
+        "paddingVertical": "pv",
+        "squaredImage": "si",
+        "theme": "t",
+        "watermark": "wm",
+        "widthAdjustment": "wa",
+        "windowControls": "wc",
+        "windowTheme": "wt",
+    }
+
+>>>>>>> a609ce2 (ishan)
 ignoredOptions = [
         # Can't pass these as URL (So no support now)
         "backgroundImage",
