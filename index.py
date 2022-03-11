@@ -100,8 +100,8 @@ def morse():
     elif not decode==None:
         result = decrypt(decode)
         return jsonify({
-            "word": f"{decode}",
-            "morse": f"{result}",
+            "morse": f"{decode}",
+            "word": f"{result}",
             })
     else:
         return jsonify({
