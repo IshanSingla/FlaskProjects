@@ -20,10 +20,10 @@ def home():
 def api():
     return render_template("api.html")
 
-@app.route('/Api/key/', methods=['POST'])
-@app.route('/api/key/', methods=['POST'])
-@app.route('/Api/Key/', methods=['POST'])
-@app.route('/api/Key/', methods=['POST'])
+@app.route('/Api/key/', methods=['GET','POST'])
+@app.route('/api/key/', methods=['GET','POST'])
+@app.route('/Api/Key/', methods=['GET','POST'])
+@app.route('/api/Key/', methods=['GET','POST'])
 def key():
     if request.method == "POST":
         data = request.get_json()
@@ -73,10 +73,6 @@ def carbon():
         if code is None:
             return jsonify({"error": "Code is required to create a Carbon!"})
         data = request.args
-<<<<<<< HEAD
-=======
-
->>>>>>> a609ce2 (ishan)
     try:
         loop.run_until_complete(get_response(data, (os.getcwd() + '/carbon_screenshot.png')))
         return send_file((os.getcwd() + '/carbon_screenshot.png'), mimetype='image/png')
@@ -105,7 +101,6 @@ defaultOptions = {
         "windowControls": True,
         "windowTheme": None,
     }
-<<<<<<< HEAD
 
 optionToQueryParam = {
         "backgroundColor": "bg",
@@ -129,8 +124,6 @@ optionToQueryParam = {
         "windowTheme": "wt",
     }
 
-=======
-
 optionToQueryParam = {
         "backgroundColor": "bg",
         "code": "code",
@@ -153,7 +146,6 @@ optionToQueryParam = {
         "windowTheme": "wt",
     }
 
->>>>>>> a609ce2 (ishan)
 ignoredOptions = [
         # Can't pass these as URL (So no support now)
         "backgroundImage",
