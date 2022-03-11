@@ -42,7 +42,7 @@ def key():
         "stats":stat
     })
 
-"""
+
 from flask_cors import CORS
 from pyppeteer import launch
 app.secret_key = 'i_iz_noob'
@@ -67,14 +67,13 @@ def home():
             return jsonify({"error": "Code is required to create a Carbon!"})
         data = request.args
     try:
-        loop.run_until_complete(carbon.get_response(carbon.createURLString(carbon.validateBody(data)), (os.getcwd() + '/templates/carbon_screenshot.png')))
-        return send_file((os.getcwd() + '/templates/carbon_screenshot.png'), mimetype='image/png')
+        loop.run_until_complete(get_response(data, (os.getcwd() + '/carbon_screenshot.png')))
+        return send_file((os.getcwd() + '/carbon_screenshot.png'), mimetype='image/png')
     except Exception as e:
         return jsonify({"error": e})
 
-class carbon:
-    DOWNLOAD_FOLDER = os.getcwd()
-    defaultOptions = {
+
+defaultOptions = {
         "backgroundColor": "rgba(171, 184, 195, 1)",
         "code": "",
         "dropShadow": True,
@@ -96,7 +95,7 @@ class carbon:
         "windowTheme": None,
     }
 
-    optionToQueryParam = {
+optionToQueryParam = {
         "backgroundColor": "bg",
         "code": "code",
         "dropShadow": "ds",
@@ -118,7 +117,7 @@ class carbon:
         "windowTheme": "wt",
     }
 
-    ignoredOptions = [
+ignoredOptions = [
         # Can't pass these as URL (So no support now)
         "backgroundImage",
         "backgroundImageSelection",
@@ -133,7 +132,8 @@ class carbon:
         "selectedLines",
     ]
 
-    async def open_carbonnowsh(url):
+
+async def get_response(body_, path):
         browser = await launch(defaultViewPort=None,
                             handleSIGINT=False,
                             handleSIGTERM=False,
@@ -143,68 +143,53 @@ class carbon:
         page = await browser.newPage()
         await page._client.send('Page.setDownloadBehavior', {
             'behavior': 'allow', 
-            'downloadPath': carbon.DOWNLOAD_FOLDER
+            'downloadPath': os.getcwd()
         })
-        await page.goto(url, timeout=100000)
-        return browser, page
-
-
-    async def get_response(url, path):
-        browser, page = await carbon.open_carbonnowsh(url)
-        element = await page.querySelector("#export-container  .container-bg")
-        img = await element.screenshot({'path': path})
-        await browser.close()
-        return (path)
-
-    def validateBody(body_):
+        first = True
+        url = ""
         validatedBody = {}
         if not body_['code']:
             raise Exception("code is required for creating carbon")
 
         for option in body_:
-            if option in carbon.ignoredOptions:
+            if option in ignoredOptions:
                 print(f"Unsupported option: {option} found. Ignoring!")
                 continue
-            if (not (option in carbon.defaultOptions)):
+            if (not (option in defaultOptions)):
                 continue
                 print(f"Unexpected option: {option} found. Ignoring!")
                 #raise Exception(f"Unexpected option: {option}")
             validatedBody[option] = body_[option]
-        return validatedBody
-
-
-    def createURLString(validatedBody):
-        base_url = "https://carbon.now.sh/"
-        first = True
-        url = ""
         try:
-            if validatedBody['backgroundColor'].startswith('#') or carbon.checkHex(validatedBody['backgroundColor'].upper()) == True:
-                validatedBody['backgroundColor'] = carbon.hex2rgb(
-                    validatedBody['backgroundColor'])
+            s=validatedBody['backgroundColor'].upper()
+            for ch in s:
+                if ((ch < '0' or ch > '9') and (ch < 'A' or ch > 'F')):  
+                    ishan= False
+            ishan= True
+            if validatedBody['backgroundColor'].startswith('#') or ishan == True:
+                h=validatedBody['backgroundColor']
+                h = h.lstrip('#')
+                validatedBody['backgroundColor'] =  ('rgb'+str(tuple(int(h[i:i+2], 16) for i in (0, 2, 4))))
         except KeyError:
             pass
         for option in validatedBody:
             if first:
                 first = False
-                url = base_url + \
-                    f"?{carbon.optionToQueryParam[option]}={validatedBody[option]}"
+                url = "https://carbon.now.sh/" + \
+                    f"?{optionToQueryParam[option]}={validatedBody[option]}"
             else:
                 url = url + \
-                    f"&{carbon.optionToQueryParam[option]}={validatedBody[option]}"
-        return url
+                    f"&{optionToQueryParam[option]}={validatedBody[option]}"
+        await page.goto(url, timeout=100000)
+        #browser, page = await carbon.open_carbonnowsh(url)
+        element = await page.querySelector("#export-container  .container-bg")
+        img = await element.screenshot({'path': path})
+        await browser.close()
+        return (path)
 
 
-    def hex2rgb(h):
-        h = h.lstrip('#')
-        return ('rgb'+str(tuple(int(h[i:i+2], 16) for i in (0, 2, 4))))
 
-    def checkHex(s):
-        for ch in s:
-            if ((ch < '0' or ch > '9') and (ch < 'A' or ch > 'F')):  
-                return False
-        return True
-
-
+"""
 @app.route('/Gen/<string:n>')
 def gen(n):
     key="".join(n[0:8])
