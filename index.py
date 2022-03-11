@@ -48,7 +48,7 @@ from pyppeteer import launch
 app.secret_key = 'i_iz_noob'
 loop = asyncio.get_event_loop()
 CORS(app)
-
+"""
 @app.route('/Api/carbon/', methods=['GET', 'POST'])
 @app.route('/api/carbon/', methods=['GET', 'POST'])
 @app.route('/Api/Carbon/', methods=['GET', 'POST'])
@@ -189,7 +189,7 @@ async def get_response(body_, path):
 
 
 
-"""
+
 @app.route('/Gen/<string:n>')
 def gen(n):
     key="".join(n[0:8])
