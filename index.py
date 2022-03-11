@@ -35,10 +35,10 @@ def key():
     else:
         key = request.args.get('Key')
         if key is None:
-            return jsonify({"error": "Key/Proxy is required"})
+            return jsonify({"error": "Key is required"})
         proxy = request.args.get('Proxy')
         if proxy is None:
-            return jsonify({"error": "Key/Proxy is required"})
+            return jsonify({"error": "Proxy is required"})
     Keys = (db.reference(f"/Key/")).get()
     if key in Keys:
         proxys = (db.reference(f"/Proxy/{key}/")).get()
