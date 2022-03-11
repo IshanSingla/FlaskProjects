@@ -16,14 +16,11 @@ def home():
     return render_template("home.html")
 
 @app.route('/api')
-@app.route('/Api')
 def api():
     return render_template("api.html")
 
-@app.route('/Api/key/', methods=['GET','POST'])
+
 @app.route('/api/key/', methods=['GET','POST'])
-@app.route('/Api/Key/', methods=['GET','POST'])
-@app.route('/api/Key/', methods=['GET','POST'])
 def key():
     if request.method == "POST":
         data = request.get_json()
@@ -56,10 +53,8 @@ def key():
     return jsonify({
         "stats":stat
     })
-@app.route('/Api/carbon/', methods=['GET', 'POST'])
+
 @app.route('/api/carbon/', methods=['GET', 'POST'])
-@app.route('/Api/Carbon/', methods=['GET', 'POST'])
-@app.route('/api/Carbon/', methods=['GET', 'POST'])
 def carbon():
     data = None
     if request.method == "POST":
@@ -79,6 +74,29 @@ def carbon():
     except Exception as e:
         ish=str(e)
         return jsonify({"error": ish})
+
+@app.route('/api/morse/', methods=['GET', 'POST'])
+def morse():
+    data = None
+    if request.method == "POST":
+        data = request.json
+        try:
+            code = data['text']
+        except KeyError:
+            return jsonify({"error": "Code is required to create a Carbon!"})
+    else:
+        code = request.args.get('code')
+        if code is None:
+            return jsonify({"error": "Code is required to create a Carbon!"})
+        data = request.args
+    try:
+        loop.run_until_complete(get_response(data, (os.getcwd() + '/carbon_screenshot.png')))
+        return send_file((os.getcwd() + '/carbon_screenshot.png'), mimetype='image/png')
+    except Exception as e:
+        ish=str(e)
+        return jsonify({"error": ish})
+
+
 
 defaultOptions = {
         "backgroundColor": "rgba(171, 184, 195, 1)",
@@ -147,7 +165,6 @@ optionToQueryParam = {
     }
 
 ignoredOptions = [
-        # Can't pass these as URL (So no support now)
         "backgroundImage",
         "backgroundImageSelection",
         "backgroundMode",
@@ -186,8 +203,6 @@ async def get_response(body_, path):
                 continue
             if (not (option in defaultOptions)):
                 continue
-                print(f"Unexpected option: {option} found. Ignoring!")
-                #raise Exception(f"Unexpected option: {option}")
             validatedBody[option] = body_[option]
         try:
             s=validatedBody['backgroundColor'].upper()
@@ -210,7 +225,6 @@ async def get_response(body_, path):
                 url = url + \
                     f"&{optionToQueryParam[option]}={validatedBody[option]}"
         await page.goto(url, timeout=100000)
-        #browser, page = await carbon.open_carbonnowsh(url)
         element = await page.querySelector("#export-container  .container-bg")
         img = await element.screenshot({'path': path})
         await browser.close()
