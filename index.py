@@ -3,6 +3,7 @@ import firebase_admin, asyncio, os
 from firebase_admin import db,credentials
 from flask_cors import CORS
 from pyppeteer import launch
+from lyrics_extractor import SongLyrics
 
 cred = credentials.Certificate('1.json')
 default_app = firebase_admin.initialize_app( cred,{'databaseURL':"https://flask-c50a2-default-rtdb.asia-southeast1.firebasedatabase.app/"})
@@ -19,8 +20,7 @@ def home():
 def api():
     return render_template("api.html")
 
-
-@app.route('/api/key/', methods=['GET','POST'])
+@app.route('/api/key', methods=['GET','POST'])
 def key():
     if request.method == "POST":
         data = request.get_json()
@@ -54,7 +54,7 @@ def key():
         "stats":stat
     })
 
-@app.route('/api/carbon/', methods=['GET', 'POST'])
+@app.route('/api/carbon', methods=['GET', 'POST'])
 def carbon():
     data = None
     if request.method == "POST":
@@ -75,7 +75,7 @@ def carbon():
         ish=str(e)
         return jsonify({"error": ish})
 
-@app.route('/api/morse/', methods=['GET','POST'])
+@app.route('/api/morse', methods=['GET','POST'])
 def morse():
     if request.method == "POST":
         data = request.get_json()
@@ -108,6 +108,25 @@ def morse():
             "error": "No Parameter given",
             })
 
+@app.route('/api/lyrics', methods=['GET','POST'])
+def lyrics():
+    if request.method == "POST":
+        data = request.get_json()
+        try:
+            encode=data['song']
+        except KeyError:
+            encode=None
+    else:
+        encode= request.args.get('song')
+
+    if not encode==None:
+        extract_lyrics = SongLyrics("AIzaSyAIZtzGSufntqJSf_xjU-nDMtw-I4HS93A","c711d9ef47b126b53")
+        ishan=extract_lyrics.get_lyrics(encode)
+        return jsonify(ishan)
+    else:
+        return jsonify({
+            "error": "No Parameter given",
+            })
 
 
 
