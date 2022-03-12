@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request, render_template, send_file
-import firebase_admin, asyncio, os
+import firebase_admin, asyncio, os, pyqrcode
 from firebase_admin import db,credentials
 from flask_cors import CORS
 from pyppeteer import launch
@@ -128,7 +128,25 @@ def lyrics():
             "error": "No Parameter given",
             })
 
+@app.route('/api/qr', methods=['GET','POST'])
+def qr():
+    if request.method == "POST":
+        data = request.get_json()
+        try:
+            encode=data['text']
+        except KeyError:
+            encode=None
+    else:
+        encode= request.args.get('text')
 
+    if not encode==None:
+        url = pyqrcode.create(encode)
+        url.png('qr.png', scale = 6)
+        return send_file((os.getcwd() + '/qr.png'), mimetype='image/png')
+    else:
+        return jsonify({
+            "error": "No Parameter given",
+            })
 
 defaultOptions = {
         "backgroundColor": "rgba(171, 184, 195, 1)",
