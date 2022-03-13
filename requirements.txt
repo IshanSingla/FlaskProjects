@@ -4,3 +4,4 @@ flask_cors
 pyppeteer
 lyrics_extractor
 pyqrcode
+pypng
