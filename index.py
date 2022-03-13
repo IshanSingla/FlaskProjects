@@ -138,14 +138,18 @@ def qr():
             encode=None
     else:
         encode= request.args.get('text')
-
-    if not encode==None:
-        url = pyqrcode.create(encode)
-        url.png('qr.png', scale = 6)
-        return send_file((os.getcwd() + '/qr.png'), mimetype='image/png')
-    else:
+    try:
+        if not encode==None:
+            url = pyqrcode.create(encode)
+            url.png('qr.png', scale = 6)
+            return send_file((os.getcwd() + '/qr.png'), mimetype='image/png')
+        else:
+            return jsonify({
+                "error": "No Parameter given",
+            })
+    except Exception as e:
         return jsonify({
-            "error": "No Parameter given",
+                "error": f"{e}",
             })
 
 defaultOptions = {
