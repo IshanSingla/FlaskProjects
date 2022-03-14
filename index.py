@@ -170,7 +170,7 @@ def notes():
                     file.write(data.content)
                     file.close()
 
-                return send_file(('/tmp/notes.png'), mimetype='image/png')
+                return None
             else:
                 return jsonify({
                 "error": "Error in api",
@@ -267,17 +267,6 @@ ignoredOptions = [
 
 
 async def get_response(body_, path):
-        browser = await launch(defaultViewPort=None,
-                            handleSIGINT=False,
-                            handleSIGTERM=False,
-                            handleSIGHUP=False,
-                            headless=True,
-                            args=['--no-sandbox', '--disable-setuid-sandbox'])
-        page = await browser.newPage()
-        await page._client.send('Page.setDownloadBehavior', {
-            'behavior': 'allow', 
-            'downloadPath': os.getcwd()
-        })
         first = True
         url = ""
         validatedBody = {}
@@ -322,11 +311,6 @@ async def get_response(body_, path):
                 return jsonify({
                 "error": "Error in api",
                 })
-        await page.goto(url, timeout=100000)
-        element = await page.querySelector("#export-container  .container-bg")
-        img = await element.screenshot({'path': path})
-        await browser.close()
-        return (path)
 
 MORSE_CODE_DICT = { 'A':'.-', 'B':'-...',
 
