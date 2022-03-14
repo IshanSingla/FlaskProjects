@@ -73,7 +73,7 @@ def carbon():
         return send_file(('/tmp/carbon_screenshot.png'), mimetype='image/png')
     except Exception as e:
         ish=str(e)
-        return jsonify({"error": ish})
+        return jsonify({"error": str(e)})
 
 @app.route('/api/morse', methods=['GET','POST'])
 def morse():
@@ -302,11 +302,11 @@ async def get_response(body_, path):
                     f"&{optionToQueryParam[option]}={validatedBody[option]}"
         data = requests.get(url)
         if data.status_code==200:
-                with open(('/tmp/notes.png'), "wb") as file:
+                with open(('/tmp/carbon_screenshot.png'), "wb") as file:
                     file.write(data.content)
                     file.close()
 
-                return send_file(('/tmp/notes.png'), mimetype='image/png')
+                return send_file(('/tmp/carbon_screenshot.png'), mimetype='image/png')
         else:
                 return jsonify({
                 "error": "Error in api",
