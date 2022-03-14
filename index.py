@@ -302,11 +302,12 @@ async def get_response(body_, path):
                     f"&{optionToQueryParam[option]}={validatedBody[option]}"
         data = requests.get(url)
         if data.status_code==200:
-                with open(('/tmp/carbon_screenshot.png'), "wb") as file:
+
+                with open(path, "wb") as file:
                     file.write(data.content)
                     file.close()
 
-                return send_file(('/tmp/carbon_screenshot.png'), mimetype='image/png')
+                return send_file(path, mimetype='image/png')
         else:
                 return jsonify({
                 "error": "Error in api",
