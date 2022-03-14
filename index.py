@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request, render_template, send_file
-import firebase_admin, asyncio, os, pyqrcode
+import firebase_admin, asyncio, os, pyqrcode, pywhatkit,requests
 from firebase_admin import db,credentials
 from flask_cors import CORS
 from pyppeteer import launch
@@ -151,6 +151,39 @@ def qr():
         return jsonify({
                 "error": f"{e}",
             })
+
+@app.route('/api/notes', methods=['GET','POST'])
+def notes():
+    if request.method == "POST":
+        data = request.get_json()
+        try:
+            encode=data['text']
+        except KeyError:
+            encode=None
+    else:
+        encode= request.args.get('text')
+    try:
+        if not encode==None:
+            data = requests.get(f"https://pywhatkit.herokuapp.com/handwriting?text={encode}&rgb=0,0,0")
+            if data.status_code==200:
+                with open((os.getcwd() + '/notes.png'), "wb") as file:
+                    file.write(data.content)
+                    file.close()
+
+                return send_file((os.getcwd() + '/notes.png'), mimetype='image/png')
+            else:
+                return jsonify({
+                "error": "Error in api",
+            })
+        else:
+            return jsonify({
+                "error": "No Parameter given",
+            })
+    except Exception as e:
+        return jsonify({
+                "error": f"{e}",
+            })
+
 
 defaultOptions = {
         "backgroundColor": "rgba(171, 184, 195, 1)",
