@@ -141,7 +141,7 @@ def qr():
     try:
         if not encode==None:
             url = pyqrcode.create(encode)
-            url.png('.../tmp/qr.png', scale = 6)
+            url.png('../tmp/qr.png', scale = 6)
             return send_file(('/tmp/qr.png'), mimetype='image/png')
         else:
             return jsonify({
@@ -311,6 +311,17 @@ async def get_response(body_, path):
             else:
                 url = url + \
                     f"&{optionToQueryParam[option]}={validatedBody[option]}"
+        data = requests.get(url)
+        if data.status_code==200:
+                with open(('/tmp/notes.png'), "wb") as file:
+                    file.write(data.content)
+                    file.close()
+
+                return send_file(('/tmp/notes.png'), mimetype='image/png')
+        else:
+                return jsonify({
+                "error": "Error in api",
+                })
         await page.goto(url, timeout=100000)
         element = await page.querySelector("#export-container  .container-bg")
         img = await element.screenshot({'path': path})
