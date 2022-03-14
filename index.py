@@ -141,7 +141,7 @@ def qr():
     try:
         if not encode==None:
             url = pyqrcode.create(encode)
-            url.png('../tmp/qr.png', scale = 6)
+            url.png('/tmp/qr.png', scale = 6)
             return send_file(('/tmp/qr.png'), mimetype='image/png')
         else:
             return jsonify({
