@@ -166,11 +166,11 @@ def notes():
         if not encode==None:
             data = requests.get(f"https://pywhatkit.herokuapp.com/handwriting?text={encode}&rgb=0,0,0")
             if data.status_code==200:
-                with open((os.getcwd() + '/notes.png'), "wb") as file:
+                with open(('/tmp/notes.png'), "wb") as file:
                     file.write(data.content)
                     file.close()
 
-                return send_file((os.getcwd() + '/notes.png'), mimetype='image/png')
+                return send_file(('/tmp/notes.png'), mimetype='image/png')
             else:
                 return jsonify({
                 "error": "Error in api",
