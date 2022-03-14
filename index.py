@@ -69,8 +69,8 @@ def carbon():
             return jsonify({"error": "Code is required to create a Carbon!"})
         data = request.args
     try:
-        loop.run_until_complete(get_response(data, (os.getcwd() + '/carbon_screenshot.png')))
-        return send_file((os.getcwd() + '/carbon_screenshot.png'), mimetype='image/png')
+        loop.run_until_complete(get_response(data, ('/tmp/carbon_screenshot.png')))
+        return send_file(('/tmp/carbon_screenshot.png'), mimetype='image/png')
     except Exception as e:
         ish=str(e)
         return jsonify({"error": ish})
@@ -141,8 +141,8 @@ def qr():
     try:
         if not encode==None:
             url = pyqrcode.create(encode)
-            url.png('qr.png', scale = 6)
-            return send_file((os.getcwd() + '/qr.png'), mimetype='image/png')
+            url.png('.../tmp/qr.png', scale = 6)
+            return send_file(('/tmp/qr.png'), mimetype='image/png')
         else:
             return jsonify({
                 "error": "No Parameter given",
