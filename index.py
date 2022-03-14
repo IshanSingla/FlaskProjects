@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request, render_template, send_file
-import firebase_admin, asyncio, os, pyqrcode, pywhatkit,requests
+import firebase_admin, asyncio, os, pyqrcode, requests
 from firebase_admin import db,credentials
 from flask_cors import CORS
 from pyppeteer import launch
