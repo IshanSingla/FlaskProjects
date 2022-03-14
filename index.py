@@ -170,7 +170,7 @@ def notes():
                     file.write(data.content)
                     file.close()
 
-                return None
+                return send_file(('/tmp/notes.png'), mimetype='image/png')
             else:
                 return jsonify({
                 "error": "Error in api",
