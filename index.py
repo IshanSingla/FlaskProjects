@@ -276,7 +276,7 @@ async def get_response(body_, path):
         page = await browser.newPage()
         await page._client.send('Page.setDownloadBehavior', {
              'behavior': 'allow', 
-             'downloadPath': '/tmp/',
+             'downloadPath': os.getcwd()+"/tmp"
          })
         first = True
         url = ""
@@ -311,7 +311,7 @@ async def get_response(body_, path):
             else:
                 url = url + \
                     f"&{optionToQueryParam[option]}={validatedBody[option]}"
-        await page.goto(url, timeout=100000)
+        await page.goto(url, timeout=1000)
         element = await page.querySelector("#export-container  .container-bg")
         img = await element.screenshot({'path': path})
         await browser.close()
