@@ -276,7 +276,7 @@ async def get_response(body_, path):
         page = await browser.newPage()
         await page._client.send('Page.setDownloadBehavior', {
              'behavior': 'allow', 
-             'downloadPath': os.getcwd()
+             'downloadPath': '/tmp/',
          })
         first = True
         url = ""
