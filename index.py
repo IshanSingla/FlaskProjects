@@ -263,7 +263,7 @@ def moneycheck():
         ballence = (db.reference(f"/Details/{userid}/ballence")).get()
         if ballence== None:
             ballence=0
-        return jsonify({"stats": f"Now Ballence is {e}Rs"})
+        return jsonify({"stats": f"Now Ballence is {ballence}Rs"})
             
     except Exception as e:
         return jsonify({"error": f"{e}"})
