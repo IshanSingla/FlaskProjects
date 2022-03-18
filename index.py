@@ -184,6 +184,89 @@ def notes():
                 "error": f"{e}",
             })
 
+@app.route('/api/moneyin', methods=['GET', 'POST'])
+def moneyin():
+    data = None
+    if request.method == "POST":
+        data = request.json
+        try:
+            userid = data['userid']
+        except KeyError:
+            return jsonify({"error": "userid is required to work"})
+        try:
+            amount = data['amount']
+        except KeyError:
+            return jsonify({"error": "amount is required to work"})
+    else:
+        userid = request.args.get('userid')
+        if userid is None:
+            return jsonify({"error": "userid is required to work"})
+        amount = request.args.get('amount')
+        if amount is None:
+            return jsonify({"error": "amount is required to work"})
+    try:
+        ballence = (db.reference(f"/Details/{userid}/ballence")).get()
+        if ballence== None:
+            ballence=0
+        ballence+=amount
+        ballence = (db.reference(f"/Details/{userid}/ballence")).set(ballence)
+        return jsonify({"stats": f"Ballence Add sucessfully Now Ballence is {e}Rs"})
+            
+    except Exception as e:
+        return jsonify({"error": f"{e}"})
+
+@app.route('/api/moneyout', methods=['GET', 'POST'])
+def moneyout():
+    data = None
+    if request.method == "POST":
+        data = request.json
+        try:
+            userid = data['userid']
+        except KeyError:
+            return jsonify({"error": "userid is required to work"})
+        try:
+            amount = data['amount']
+        except KeyError:
+            return jsonify({"error": "amount is required to work"})
+    else:
+        userid = request.args.get('userid')
+        if userid is None:
+            return jsonify({"error": "userid is required to work"})
+        amount = request.args.get('amount')
+        if amount is None:
+            return jsonify({"error": "amount is required to work"})
+    try:
+        ballence = (db.reference(f"/Details/{userid}/ballence")).get()
+        if ballence== None:
+            ballence=0
+        ballence-=amount
+        ballence = (db.reference(f"/Details/{userid}/ballence")).set(ballence)
+        return jsonify({"stats": f"Ballence Add sucessfully Now Ballence is {e}Rs"})
+            
+    except Exception as e:
+        return jsonify({"error": f"{e}"})
+
+@app.route('/api/moneycheck', methods=['GET', 'POST'])
+def moneycheck():
+    data = None
+    if request.method == "POST":
+        data = request.json
+        try:
+            userid = data['userid']
+        except KeyError:
+            return jsonify({"error": "userid is required to work"})
+    else:
+        userid = request.args.get('userid')
+        if userid is None:
+            return jsonify({"error": "userid is required to work"})
+    try:
+        ballence = (db.reference(f"/Details/{userid}/ballence")).get()
+        if ballence== None:
+            ballence=0
+        return jsonify({"stats": f"Now Ballence is {e}Rs"})
+            
+    except Exception as e:
+        return jsonify({"error": f"{e}"})
 
 defaultOptions = {
         "backgroundColor": "rgba(171, 184, 195, 1)",
