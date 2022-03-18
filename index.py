@@ -208,7 +208,7 @@ def moneyin():
         ballence = (db.reference(f"/Details/{userid}/ballence")).get()
         if ballence== None:
             ballence=0
-        ballence+=amount
+        ballence+=int(amount)
         ballence = (db.reference(f"/Details/{userid}/ballence")).set(ballence)
         return jsonify({"stats": f"Ballence Add sucessfully Now Ballence is {e}Rs"})
             
@@ -239,7 +239,7 @@ def moneyout():
         ballence = (db.reference(f"/Details/{userid}/ballence")).get()
         if ballence== None:
             ballence=0
-        ballence-=amount
+        ballence-=int(amount)
         ballence = (db.reference(f"/Details/{userid}/ballence")).set(ballence)
         return jsonify({"stats": f"Ballence Add sucessfully Now Ballence is {e}Rs"})
             
