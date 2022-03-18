@@ -209,8 +209,8 @@ def moneyin():
         if ballence== None:
             ballence=0
         ballence+=int(amount)
-        ballence = (db.reference(f"/Details/{userid}/ballence")).set(ballence)
-        return jsonify({"stats": f"Ballence Add sucessfully Now Ballence is {e}Rs"})
+        ball = (db.reference(f"/Details/{userid}/ballence")).set(ballence)
+        return jsonify({"stats": f"Ballence Add sucessfully Now Ballence is {ballence}Rs"})
             
     except Exception as e:
         return jsonify({"error": f"{e}"})
@@ -240,8 +240,8 @@ def moneyout():
         if ballence== None:
             ballence=0
         ballence-=int(amount)
-        ballence = (db.reference(f"/Details/{userid}/ballence")).set(ballence)
-        return jsonify({"stats": f"Ballence Add sucessfully Now Ballence is {e}Rs"})
+        ballen= (db.reference(f"/Details/{userid}/ballence")).set(ballence)
+        return jsonify({"stats": f"Ballence Add sucessfully Now Ballence is {ballence}Rs"})
             
     except Exception as e:
         return jsonify({"error": f"{e}"})
