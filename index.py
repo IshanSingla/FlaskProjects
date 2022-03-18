@@ -1,17 +1,26 @@
-from flask import Flask, jsonify, request, render_template, send_file
+from flask import Flask, flash, jsonify, request, render_template, send_file
 import firebase_admin, asyncio, os, pyqrcode, requests
 from firebase_admin import db,credentials
 from flask_cors import CORS
 from pyppeteer import launch
 from lyrics_extractor import SongLyrics
+from flask_wtf.csrf import CSRFProtect, CSRFError
 
 cred = credentials.Certificate('1.json')
 default_app = firebase_admin.initialize_app( cred,{'databaseURL':"https://flask-c50a2-default-rtdb.asia-southeast1.firebasedatabase.app/"})
 
 app = Flask(__name__)
+csrf = CSRFProtect(app)
+csrf.init_app(app)
+
 app.secret_key = 'i_iz_noob'
 loop = asyncio.get_event_loop()
 CORS(app)
+
+@app.errorhandler(CSRFError)
+def handle_csrf_error(e):
+    return jsonify({"error": f"Your Are trying to do CSRF Attack"}), 400
+
 @app.route('/')
 def home():
     return render_template("home.html")
@@ -496,4 +505,4 @@ def Clear(n):
 """
 
 if __name__ == "__main__":
-    app.run(debug=True,use_reloader=True, threaded=True)
+    app.run(use_reloader=True, threaded=True)

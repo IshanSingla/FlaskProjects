@@ -5,3 +5,4 @@ pyppeteer
 lyrics_extractor
 pyqrcode
 pypng
+Flask-WTF
