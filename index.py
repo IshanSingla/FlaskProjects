@@ -252,7 +252,7 @@ def moneyout():
         Transiction = (db.reference(f"/Details/{userid}/Transiction")).get()
         if Transiction== None:
             Transiction=[]
-        Transict = (db.reference(f"/Details/{userid}/Transiction/{len(Transiction)}/type")).set("CR")
+        Transict = (db.reference(f"/Details/{userid}/Transiction/{len(Transiction)}/type")).set("DR")
         Transict = (db.reference(f"/Details/{userid}/Transiction/{len(Transiction)}/amount")).set(int(amount))
         Transict = (db.reference(f"/Details/{userid}/Transiction/{len(Transiction)}/time")).set( f"{datetime.today()}")
         ballen= (db.reference(f"/Details/{userid}/ballence")).set(ballence)
