@@ -1,25 +1,17 @@
 from flask import Flask, flash, jsonify, request, render_template, send_file
 import firebase_admin, asyncio, os, pyqrcode, requests
 from firebase_admin import db,credentials
-from flask_cors import CORS
 from pyppeteer import launch
 from lyrics_extractor import SongLyrics
-from flask_wtf.csrf import CSRFProtect, CSRFError
+from datetime import datetime, date
 
 cred = credentials.Certificate('1.json')
 default_app = firebase_admin.initialize_app( cred,{'databaseURL':"https://flask-c50a2-default-rtdb.asia-southeast1.firebasedatabase.app/"})
 
 app = Flask(__name__)
-csrf = CSRFProtect(app)
-csrf.init_app(app)
 
 app.secret_key = 'i_iz_noob'
 loop = asyncio.get_event_loop()
-CORS(app)
-
-@app.errorhandler(CSRFError)
-def handle_csrf_error(e):
-    return jsonify({"error": f"Your Are trying to do CSRF Attack"}), 400
 
 @app.route('/')
 def home():
@@ -218,6 +210,12 @@ def moneyin():
         if ballence== None:
             ballence=0
         ballence+=int(amount)
+        Transiction = (db.reference(f"/Details/{userid}/Transiction")).get()
+        if Transiction== None:
+            Transiction=[]
+        Transict = (db.reference(f"/Details/{userid}/Transiction/{len(Transiction)}/type")).set("CR")
+        Transict = (db.reference(f"/Details/{userid}/Transiction/{len(Transiction)}/amount")).set(int(amount))
+        Transict = (db.reference(f"/Details/{userid}/Transiction/{len(Transiction)}/time")).set( f"{datetime.today()}")
         ball = (db.reference(f"/Details/{userid}/ballence")).set(ballence)
         return jsonify({"stats": f"Ballence Add sucessfully Now Ballence is {ballence}Rs"})
             
@@ -249,8 +247,16 @@ def moneyout():
         if ballence== None:
             ballence=0
         ballence-=int(amount)
+        if ballence<0:
+            return jsonify({"stats": f"Insufficient Ballence"})
+        Transiction = (db.reference(f"/Details/{userid}/Transiction")).get()
+        if Transiction== None:
+            Transiction=[]
+        Transict = (db.reference(f"/Details/{userid}/Transiction/{len(Transiction)}/type")).set("CR")
+        Transict = (db.reference(f"/Details/{userid}/Transiction/{len(Transiction)}/amount")).set(int(amount))
+        Transict = (db.reference(f"/Details/{userid}/Transiction/{len(Transiction)}/time")).set( f"{datetime.today()}")
         ballen= (db.reference(f"/Details/{userid}/ballence")).set(ballence)
-        return jsonify({"stats": f"Ballence Add sucessfully Now Ballence is {ballence}Rs"})
+        return jsonify({"stats": f"Ballence Decrease sucessfully Now Ballence is {ballence}Rs"})
             
     except Exception as e:
         return jsonify({"error": f"{e}"})
@@ -276,6 +282,45 @@ def moneycheck():
             
     except Exception as e:
         return jsonify({"error": f"{e}"})
+
+@app.route('/api/moneytrans', methods=['GET', 'POST'])
+def moneytrans():
+    data = None
+    if request.method == "POST":
+        data = request.json
+        try:
+            userid = data['userid']
+        except KeyError:
+            return jsonify({"error": "userid is required to work"})
+    else:
+        userid = request.args.get('userid')
+        if userid is None:
+            return jsonify({"error": "userid is required to work"})
+    try:
+
+        Transiction = (db.reference(f"/Details/{userid}/Transiction")).get()
+        if Transiction== None:
+            Transiction=[
+                {
+                    "type": "-",
+                    "amount": "-",
+                    "date/time": "-"
+                }
+            ]
+        ballence = (db.reference(f"/Details/{userid}/ballence")).get()
+        if ballence== None:
+            ballence=0
+        return jsonify({
+                "ballence": ballence,
+                "transiction": Transiction,
+
+            }
+        )
+            
+    except Exception as e:
+        return jsonify({"error": f"{e}"})
+
+
 
 defaultOptions = {
         "backgroundColor": "rgba(171, 184, 195, 1)",
