@@ -193,18 +193,18 @@ def moneyin():
         try:
             userid = data['userid']
         except KeyError:
-            return jsonify({"error": "userid is required to work"})
+            return jsonify({"stats": "userid is required to work"})
         try:
             amount = data['amount']
         except KeyError:
-            return jsonify({"error": "amount is required to work"})
+            return jsonify({"stats": "amount is required to work"})
     else:
         userid = request.args.get('userid')
         if userid is None:
-            return jsonify({"error": "userid is required to work"})
+            return jsonify({"stats": "userid is required to work"})
         amount = request.args.get('amount')
         if amount is None:
-            return jsonify({"error": "amount is required to work"})
+            return jsonify({"stats": "amount is required to work"})
     try:
         ballence = (db.reference(f"/Details/{userid}/ballence")).get()
         if ballence== None:
@@ -217,10 +217,10 @@ def moneyin():
         Transict = (db.reference(f"/Details/{userid}/Transiction/{len(Transiction)}/amount")).set(int(amount))
         Transict = (db.reference(f"/Details/{userid}/Transiction/{len(Transiction)}/time")).set( f"{datetime.today()}")
         ball = (db.reference(f"/Details/{userid}/ballence")).set(ballence)
-        return jsonify({"stats": f"Ballence Add sucessfully Now Ballence is {ballence}Rs"})
+        return jsonify({"stats": f"Done", "ballence":f"{ballence}"})
             
     except Exception as e:
-        return jsonify({"error": f"{e}"})
+        return jsonify({"stats": f"{e}"})
 
 @app.route('/api/moneyout', methods=['GET', 'POST'])
 def moneyout():
@@ -230,18 +230,18 @@ def moneyout():
         try:
             userid = data['userid']
         except KeyError:
-            return jsonify({"error": "userid is required to work"})
+            return jsonify({"stats": "userid is required to work"})
         try:
             amount = data['amount']
         except KeyError:
-            return jsonify({"error": "amount is required to work"})
+            return jsonify({"stats": "amount is required to work"})
     else:
         userid = request.args.get('userid')
         if userid is None:
-            return jsonify({"error": "userid is required to work"})
+            return jsonify({"stats": "userid is required to work"})
         amount = request.args.get('amount')
         if amount is None:
-            return jsonify({"error": "amount is required to work"})
+            return jsonify({"stats": "amount is required to work"})
     try:
         ballence = (db.reference(f"/Details/{userid}/ballence")).get()
         if ballence== None:
@@ -256,10 +256,10 @@ def moneyout():
         Transict = (db.reference(f"/Details/{userid}/Transiction/{len(Transiction)}/amount")).set(int(amount))
         Transict = (db.reference(f"/Details/{userid}/Transiction/{len(Transiction)}/time")).set( f"{datetime.today()}")
         ballen= (db.reference(f"/Details/{userid}/ballence")).set(ballence)
-        return jsonify({"stats": f"Ballence Decrease sucessfully Now Ballence is {ballence}Rs"})
+        return jsonify({"stats": f"Done", "ballence":f"{ballence}"})
             
     except Exception as e:
-        return jsonify({"error": f"{e}"})
+        return jsonify({"stats": f"Error: {e}"})
 
 @app.route('/api/moneycheck', methods=['GET', 'POST'])
 def moneycheck():
@@ -269,19 +269,19 @@ def moneycheck():
         try:
             userid = data['userid']
         except KeyError:
-            return jsonify({"error": "userid is required to work"})
+            return jsonify({"stats": "userid is required to work"})
     else:
         userid = request.args.get('userid')
         if userid is None:
-            return jsonify({"error": "userid is required to work"})
+            return jsonify({"stats": "userid is required to work"})
     try:
         ballence = (db.reference(f"/Details/{userid}/ballence")).get()
         if ballence== None:
             ballence=0
-        return jsonify({"stats": f"Now Ballence is {ballence}Rs"})
+        return jsonify({"stats": f"{ballence}"})
             
     except Exception as e:
-        return jsonify({"error": f"{e}"})
+        return jsonify({"stats": f"{e}"})
 
 @app.route('/api/moneytrans', methods=['GET', 'POST'])
 def moneytrans():
@@ -291,11 +291,11 @@ def moneytrans():
         try:
             userid = data['userid']
         except KeyError:
-            return jsonify({"error": "userid is required to work"})
+            return jsonify({"stats": "userid is required to work"})
     else:
         userid = request.args.get('userid')
         if userid is None:
-            return jsonify({"error": "userid is required to work"})
+            return jsonify({"stats": "userid is required to work"})
     try:
 
         Transiction = (db.reference(f"/Details/{userid}/Transiction")).get()
@@ -318,7 +318,7 @@ def moneytrans():
         )
             
     except Exception as e:
-        return jsonify({"error": f"{e}"})
+        return jsonify({"stats": f"{e}"})
 
 
 
