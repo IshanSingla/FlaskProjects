@@ -283,6 +283,8 @@ def moneycheck():
     except Exception as e:
         return jsonify({"stats": f"{e}"})
 
+
+
 @app.route('/api/moneytrans', methods=['GET', 'POST'])
 def moneytrans():
     data = None
@@ -307,13 +309,22 @@ def moneytrans():
                     "date/time": "-"
                 }
             ]
+        cr=0
+        dr=0
+        for x in Transiction:
+            if x["type"]=="Cr":
+                cr+=1
+            if x["type"]=="Dr":
+                dr+=1
+
         ballence = (db.reference(f"/Details/{userid}/ballence")).get()
         if ballence== None:
             ballence=0
         return jsonify({
                 "ballence": ballence,
                 "transiction": Transiction,
-
+                "dr":dr,
+                "cr":cr,
             }
         )
             
