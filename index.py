@@ -1,5 +1,6 @@
-from flask import Flask, flash, jsonify, request, render_template, send_file
+from flask import Flask, flash, jsonify, request, render_template, send_file, redirect
 import firebase_admin, asyncio, os, pyqrcode, requests
+from isodate import parse_duration
 from firebase_admin import db,credentials
 from pyppeteer import launch
 from lyrics_extractor import SongLyrics
@@ -333,7 +334,7 @@ def moneytrans():
 
 
     
-@app.route('/yt', methods=['GET', 'POST'])
+@app.route('/youtube', methods=['GET', 'POST'])
 def index():
     search_url = 'https://www.googleapis.com/youtube/v3/search'
     video_url = 'https://www.googleapis.com/youtube/v3/videos'
