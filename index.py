@@ -333,7 +333,7 @@ def moneytrans():
 
 
     
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/yt', methods=['GET', 'POST'])
 def index():
     search_url = 'https://www.googleapis.com/youtube/v3/search'
     video_url = 'https://www.googleapis.com/youtube/v3/videos'
