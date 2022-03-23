@@ -370,9 +370,10 @@ def index():
         'key': "AIzaSyDHaYtqlyjOIljQbfRvCxHgfSB3Jtn8DSQ",
         'q': ref,
         'part': 'snippet',
-        'maxResults': 21,
+        'maxResults': 30,
         'type': 'video'
     }
+
     r = requests.get(
         'https://www.googleapis.com/youtube/v3/search', params=search_params)
     results = r.json()['items']
@@ -384,7 +385,7 @@ def index():
         'key': "AIzaSyDHaYtqlyjOIljQbfRvCxHgfSB3Jtn8DSQ",
         'id': ','.join(video_ids),
         'part': 'snippet,contentDetails',
-        'maxResults': 21
+        'maxResults': 30,
     }
     r = requests.get(video_url, params=video_params)
     results = r.json()['items']
