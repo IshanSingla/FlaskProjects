@@ -1,8 +1,7 @@
 flask
 firebase_admin
-flask_cors
 pyppeteer
 lyrics_extractor
 pyqrcode
 pypng
-Flask-WTF
+isodate
