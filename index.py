@@ -334,23 +334,25 @@ def moneytrans():
 
 
     
-@app.route('/youtube', methods=['GET', 'POST'])
+@app.route('/YouTube', methods=['GET', 'POST'])
 def index():
-    search_url = 'https://www.googleapis.com/youtube/v3/search'
     video_url = 'https://www.googleapis.com/youtube/v3/videos'
 
     videos = []
+    ref= request.form.get('query')
+    if ref==None:
+        ref="Induced Official"
 
     if request.method == 'POST':
         search_params = { 
             'key' : "AIzaSyDHaYtqlyjOIljQbfRvCxHgfSB3Jtn8DSQ",
-            'q' : request.form.get('query'),
+            'q' : ref,
             'part' : 'snippet',
             'maxResults' : 9,
             'type' : 'video'
         }
 
-        r = requests.get(search_url, params=search_params)
+        r = requests.get('https://www.googleapis.com/youtube/v3/search', params=search_params)
 
         results = r.json()['items']
 
@@ -373,7 +375,7 @@ def index():
         for result in results:
             video_data = {
                 'id' : result['id'],
-                'url' : f'https://www.youtube.com/watch?v={ result["id"] }',
+                'url' : f'https://www.induced.me/YouTube/watch?v={ result["id"] }',
                 'thumbnail' : result['snippet']['thumbnails']['high']['url'],
                 'duration' : int(parse_duration(result['contentDetails']['duration']).total_seconds() // 60),
                 'title' : result['snippet']['title'],
@@ -381,6 +383,24 @@ def index():
             videos.append(video_data)
         
     return render_template('yt.html', videos=videos)
+
+
+@app.route('/YouTube/watch', methods=['GET', 'POST'])
+def watch():
+    search_url = 'https://www.googleapis.com/youtube/v3/search'
+    if request.method == "POST":
+        data = request.json
+        try:
+            v = data['v']
+        except KeyError:
+            return jsonify({"stats": "v is required to work"})
+    else:
+        v = request.args.get('v')
+        if v is None:
+            return jsonify({"stats": "userid is required to work"})
+
+    return render_template('videoplay.html', videos=v)
+            
 
 
 defaultOptions = {
