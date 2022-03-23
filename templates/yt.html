@@ -105,7 +105,7 @@ nav {
     font-size: 0.6rem;
 }
 * {
-    --nav-height: 6rem;
+    --nav-height: 3.5rem;
     --input-bg-color: #121212;
     --input-border-color: #303030;
     --input-active-color: #1b5daf;
@@ -165,6 +165,7 @@ nav {
     display: grid;
     grid-template-columns: 1fr 4rem;
 }
+
 
 #search-form input[type="search"] {
     height: calc(var(--nav-height) / 1.5);
@@ -234,10 +235,19 @@ nav {
         margin-left: auto;
         padding-right: 1rem;
     }
+    
+
+
 }
 
 
 /*  */
+.search-form{
+    display: flex;
+    flex-direction: row;}
+.search-bar{
+    width: 400px;
+}
 
 body {
     font-family: 'Poppins', sans-serif;
@@ -263,9 +273,9 @@ body {
 
             <!-- 2 -->
             <div id="second-nav-container">
-                <form method="POST">
+                <form method="POST" class="search-form">
                     <div class="input-group mb-3">
-                        <input type="search" name="query" placeholder="Search" autocomplete="off">
+                        <input class="search-bar" type="search" name="query" placeholder="Search" autocomplete="off">
                     </div>
                         <button type="submit" name="submit" value="search" class="btn btn-primary my-2">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" class="style-scope yt-icon" ><g class="style-scope yt-icon"><path d="M20.87,20.17l-5.59-5.59C16.35,13.35,17,11.75,17,10c0-3.87-3.13-7-7-7s-7,3.13-7,7s3.13,7,7,7c1.75,0,3.35-0.65,4.58-1.71 l5.59,5.59L20.87,20.17z M10,16c-3.31,0-6-2.69-6-6s2.69-6,6-6s6,2.69,6,6S13.31,16,10,16z" class="style-scope yt-icon"></path></g></svg>
@@ -341,8 +351,8 @@ body {
           <div class="row">
             {% for video in videos %}
             <div class="col-md-4">
-              <div class="card mb-4 shadow-sm">
-                <img class="bd-placeholder-img card-img-top" width="100%" height="225" src="{{ video.thumbnail }}" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"></img>
+              <div class="card mb-4 shadow-sm" >
+                <img class="bd-placeholder-img card-img-top" width="100%" height="225" src="{{ video.thumbnail }}" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail" href="{{ video.url }}"></img>
                 <div class="card-body">
                   <p class="card-text">{{ video.title }}</p>
                   <div class="d-flex justify-content-between align-items-center">
