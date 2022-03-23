@@ -1,34 +1,42 @@
 from flask import Flask, flash, jsonify, request, render_template, send_file, redirect
-import firebase_admin, asyncio, os, pyqrcode, requests
+import firebase_admin
+import asyncio
+import os
+import pyqrcode
+import requests
 from isodate import parse_duration
-from firebase_admin import db,credentials
+from firebase_admin import db, credentials
 from pyppeteer import launch
 from lyrics_extractor import SongLyrics
 from datetime import datetime, date
 
 cred = credentials.Certificate('1.json')
-default_app = firebase_admin.initialize_app( cred,{'databaseURL':"https://flask-c50a2-default-rtdb.asia-southeast1.firebasedatabase.app/"})
+default_app = firebase_admin.initialize_app(
+    cred, {'databaseURL': "https://flask-c50a2-default-rtdb.asia-southeast1.firebasedatabase.app/"})
 
 app = Flask(__name__)
 
 app.secret_key = 'i_iz_noob'
 loop = asyncio.get_event_loop()
 
+
 @app.route('/')
 def home():
     return render_template("home.html")
+
 
 @app.route('/api')
 def api():
     return render_template("api.html")
 
-@app.route('/api/key', methods=['GET','POST'])
+
+@app.route('/api/key', methods=['GET', 'POST'])
 def key():
     if request.method == "POST":
         data = request.get_json()
         try:
-            key=data['Key']
-            proxy=data['Proxy']
+            key = data['Key']
+            proxy = data['Proxy']
         except KeyError:
             return jsonify({"error": "Key/Proxy is required"})
     else:
@@ -41,20 +49,21 @@ def key():
     Keys = (db.reference(f"/Key/")).get()
     if key in Keys:
         proxys = (db.reference(f"/Proxy/{key}/")).get()
-        if proxys ==None:
-            proxys=[]
-        if not len(proxys)<5:
-            stat="Too Many Proxies Ask Owner to Restart"
+        if proxys == None:
+            proxys = []
+        if not len(proxys) < 5:
+            stat = "Too Many Proxies Ask Owner to Restart"
         else:
             if not proxy in proxys:
                 proxys.append(f"{proxy}")
-                pro= (db.reference(f"/Proxy/{key}/")).set(proxys)
-            stat="Done"
+                pro = (db.reference(f"/Proxy/{key}/")).set(proxys)
+            stat = "Done"
     else:
-        stat="Key is Invalid"
+        stat = "Key is Invalid"
     return jsonify({
-        "stats":stat
+        "stats": stat
     })
+
 
 @app.route('/api/carbon', methods=['GET', 'POST'])
 def carbon():
@@ -71,79 +80,84 @@ def carbon():
             return jsonify({"error": "Code is required to create a Carbon!"})
         data = request.args
     try:
-        loop.run_until_complete(get_response(data, ('/tmp/carbon_screenshot.png')))
+        loop.run_until_complete(get_response(
+            data, ('/tmp/carbon_screenshot.png')))
         return send_file(('/tmp/carbon_screenshot.png'), mimetype='image/png')
     except Exception as e:
-        ish=str(e)
+        ish = str(e)
         return jsonify({"error": str(e)})
 
-@app.route('/api/morse', methods=['GET','POST'])
+
+@app.route('/api/morse', methods=['GET', 'POST'])
 def morse():
     if request.method == "POST":
         data = request.get_json()
         try:
-            encode=data['encode']
+            encode = data['encode']
         except KeyError:
-            encode=None
+            encode = None
         try:
-            decode=data['decode']
+            decode = data['decode']
         except KeyError:
-            decode=None
+            decode = None
     else:
-        encode= request.args.get('encode')
-        decode= request.args.get('decode')
+        encode = request.args.get('encode')
+        decode = request.args.get('decode')
 
-    if not encode==None:
+    if not encode == None:
         result = encrypt(encode.upper())
         return jsonify({
             "word": f"{encode}",
             "morse": f"{result}",
-            })
-    elif not decode==None:
+        })
+    elif not decode == None:
         result = decrypt(decode)
         return jsonify({
             "morse": f"{decode}",
             "word": f"{result}",
-            })
+        })
     else:
         return jsonify({
             "error": "No Parameter given",
-            })
+        })
 
-@app.route('/api/lyrics', methods=['GET','POST'])
+
+@app.route('/api/lyrics', methods=['GET', 'POST'])
 def lyrics():
     if request.method == "POST":
         data = request.get_json()
         try:
-            encode=data['song']
+            encode = data['song']
         except KeyError:
-            encode=None
+            encode = None
     else:
-        encode= request.args.get('song')
+        encode = request.args.get('song')
 
-    if not encode==None:
-        extract_lyrics = SongLyrics("AIzaSyAIZtzGSufntqJSf_xjU-nDMtw-I4HS93A","c711d9ef47b126b53")
-        ishan=extract_lyrics.get_lyrics(encode)
+    if not encode == None:
+        extract_lyrics = SongLyrics(
+            "AIzaSyAIZtzGSufntqJSf_xjU-nDMtw-I4HS93A", "c711d9ef47b126b53")
+        ishan = extract_lyrics.get_lyrics(encode)
         return jsonify(ishan)
     else:
         return jsonify({
             "error": "No Parameter given",
-            })
+        })
 
-@app.route('/api/qr', methods=['GET','POST'])
+
+@app.route('/api/qr', methods=['GET', 'POST'])
 def qr():
     if request.method == "POST":
         data = request.get_json()
         try:
-            encode=data['text']
+            encode = data['text']
         except KeyError:
-            encode=None
+            encode = None
     else:
-        encode= request.args.get('text')
+        encode = request.args.get('text')
     try:
-        if not encode==None:
+        if not encode == None:
             url = pyqrcode.create(encode)
-            url.png('/tmp/qr.png', scale = 6)
+            url.png('/tmp/qr.png', scale=6)
             return send_file(('/tmp/qr.png'), mimetype='image/png')
         else:
             return jsonify({
@@ -151,23 +165,25 @@ def qr():
             })
     except Exception as e:
         return jsonify({
-                "error": f"{e}",
-            })
+            "error": f"{e}",
+        })
 
-@app.route('/api/notes', methods=['GET','POST'])
+
+@app.route('/api/notes', methods=['GET', 'POST'])
 def notes():
     if request.method == "POST":
         data = request.get_json()
         try:
-            encode=data['text']
+            encode = data['text']
         except KeyError:
-            encode=None
+            encode = None
     else:
-        encode= request.args.get('text')
+        encode = request.args.get('text')
     try:
-        if not encode==None:
-            data = requests.get(f"https://pywhatkit.herokuapp.com/handwriting?text={encode}&rgb=0,0,0")
-            if data.status_code==200:
+        if not encode == None:
+            data = requests.get(
+                f"https://pywhatkit.herokuapp.com/handwriting?text={encode}&rgb=0,0,0")
+            if data.status_code == 200:
                 with open(('/tmp/notes.png'), "wb") as file:
                     file.write(data.content)
                     file.close()
@@ -175,16 +191,17 @@ def notes():
                 return send_file(('/tmp/notes.png'), mimetype='image/png')
             else:
                 return jsonify({
-                "error": "Error in api",
-            })
+                    "error": "Error in api",
+                })
         else:
             return jsonify({
                 "error": "No Parameter given",
             })
     except Exception as e:
         return jsonify({
-                "error": f"{e}",
-            })
+            "error": f"{e}",
+        })
+
 
 @app.route('/api/moneyin', methods=['GET', 'POST'])
 def moneyin():
@@ -208,20 +225,24 @@ def moneyin():
             return jsonify({"stats": "amount is required to work"})
     try:
         ballence = (db.reference(f"/Details/{userid}/ballence")).get()
-        if ballence== None:
-            ballence=0
-        ballence+=int(amount)
+        if ballence == None:
+            ballence = 0
+        ballence += int(amount)
         Transiction = (db.reference(f"/Details/{userid}/Transiction")).get()
-        if Transiction== None:
-            Transiction=[]
-        Transict = (db.reference(f"/Details/{userid}/Transiction/{len(Transiction)}/type")).set("CR")
-        Transict = (db.reference(f"/Details/{userid}/Transiction/{len(Transiction)}/amount")).set(int(amount))
-        Transict = (db.reference(f"/Details/{userid}/Transiction/{len(Transiction)}/time")).set( f"{datetime.today()}")
+        if Transiction == None:
+            Transiction = []
+        Transict = (db.reference(
+            f"/Details/{userid}/Transiction/{len(Transiction)}/type")).set("CR")
+        Transict = (db.reference(
+            f"/Details/{userid}/Transiction/{len(Transiction)}/amount")).set(int(amount))
+        Transict = (db.reference(
+            f"/Details/{userid}/Transiction/{len(Transiction)}/time")).set(f"{datetime.today()}")
         ball = (db.reference(f"/Details/{userid}/ballence")).set(ballence)
-        return jsonify({"stats": f"Done", "ballence":f"{ballence}"})
-            
+        return jsonify({"stats": f"Done", "ballence": f"{ballence}"})
+
     except Exception as e:
         return jsonify({"stats": f"{e}"})
+
 
 @app.route('/api/moneyout', methods=['GET', 'POST'])
 def moneyout():
@@ -245,22 +266,26 @@ def moneyout():
             return jsonify({"stats": "amount is required to work"})
     try:
         ballence = (db.reference(f"/Details/{userid}/ballence")).get()
-        if ballence== None:
-            ballence=0
-        ballence-=int(amount)
-        if ballence<0:
+        if ballence == None:
+            ballence = 0
+        ballence -= int(amount)
+        if ballence < 0:
             return jsonify({"stats": f"Insufficient Ballence"})
         Transiction = (db.reference(f"/Details/{userid}/Transiction")).get()
-        if Transiction== None:
-            Transiction=[]
-        Transict = (db.reference(f"/Details/{userid}/Transiction/{len(Transiction)}/type")).set("DR")
-        Transict = (db.reference(f"/Details/{userid}/Transiction/{len(Transiction)}/amount")).set(int(amount))
-        Transict = (db.reference(f"/Details/{userid}/Transiction/{len(Transiction)}/time")).set( f"{datetime.today()}")
-        ballen= (db.reference(f"/Details/{userid}/ballence")).set(ballence)
-        return jsonify({"stats": f"Done", "ballence":f"{ballence}"})
-            
+        if Transiction == None:
+            Transiction = []
+        Transict = (db.reference(
+            f"/Details/{userid}/Transiction/{len(Transiction)}/type")).set("DR")
+        Transict = (db.reference(
+            f"/Details/{userid}/Transiction/{len(Transiction)}/amount")).set(int(amount))
+        Transict = (db.reference(
+            f"/Details/{userid}/Transiction/{len(Transiction)}/time")).set(f"{datetime.today()}")
+        ballen = (db.reference(f"/Details/{userid}/ballence")).set(ballence)
+        return jsonify({"stats": f"Done", "ballence": f"{ballence}"})
+
     except Exception as e:
         return jsonify({"stats": f"Error: {e}"})
+
 
 @app.route('/api/moneycheck', methods=['GET', 'POST'])
 def moneycheck():
@@ -277,13 +302,12 @@ def moneycheck():
             return jsonify({"stats": "userid is required to work"})
     try:
         ballence = (db.reference(f"/Details/{userid}/ballence")).get()
-        if ballence== None:
-            ballence=0
+        if ballence == None:
+            ballence = 0
         return jsonify({"stats": f"{ballence}"})
-            
+
     except Exception as e:
         return jsonify({"stats": f"{e}"})
-
 
 
 @app.route('/api/moneytrans', methods=['GET', 'POST'])
@@ -302,33 +326,33 @@ def moneytrans():
     try:
 
         Transiction = (db.reference(f"/Details/{userid}/Transiction")).get()
-        if Transiction== None:
-            Transiction=[
+        if Transiction == None:
+            Transiction = [
                 {
                     "type": "-",
                     "amount": "-",
                     "date/time": "-"
                 }
             ]
-        cr=0
-        dr=0
+        cr = 0
+        dr = 0
         for x in Transiction:
-            if x["type"]=="Cr":
-                cr+=1
-            if x["type"]=="Dr":
-                dr+=1
+            if x["type"] == "Cr":
+                cr += 1
+            if x["type"] == "Dr":
+                dr += 1
 
         ballence = (db.reference(f"/Details/{userid}/ballence")).get()
-        if ballence== None:
-            ballence=0
+        if ballence == None:
+            ballence = 0
         return jsonify({
-                "ballence": ballence,
-                "transiction": Transiction,
-                "dr":dr,
-                "cr":cr,
-            }
+            "ballence": ballence,
+            "transiction": Transiction,
+            "dr": dr,
+            "cr": cr,
+        }
         )
-            
+
     except Exception as e:
         return jsonify({"stats": f"{e}"})
 
@@ -339,39 +363,40 @@ def index():
     video_url = 'https://www.googleapis.com/youtube/v3/videos'
 
     videos = []
-    ref= request.form.get('query')
-    if ref==None:
-        ref="Induced Official"
-    search_params = { 
-            'key' : "AIzaSyDHaYtqlyjOIljQbfRvCxHgfSB3Jtn8DSQ",
-            'q' : ref,
-            'part' : 'snippet',
-            'maxResults' : 9,
-            'type' : 'video'
-        }
-    r = requests.get('https://www.googleapis.com/youtube/v3/search', params=search_params)
+    ref = request.form.get('query')
+    if ref == None:
+        ref = "Induced Official"
+    search_params = {
+        'key': "AIzaSyDHaYtqlyjOIljQbfRvCxHgfSB3Jtn8DSQ",
+        'q': ref,
+        'part': 'snippet',
+        'maxResults': 9,
+        'type': 'video'
+    }
+    r = requests.get(
+        'https://www.googleapis.com/youtube/v3/search', params=search_params)
     results = r.json()['items']
     video_ids = []
     for result in results:
         video_ids.append(result['id']['videoId'])
 
     video_params = {
-            'key' : "AIzaSyDHaYtqlyjOIljQbfRvCxHgfSB3Jtn8DSQ",
-            'id' : ','.join(video_ids),
-            'part' : 'snippet,contentDetails',
-            'maxResults' : 9
-        }
+        'key': "AIzaSyDHaYtqlyjOIljQbfRvCxHgfSB3Jtn8DSQ",
+        'id': ','.join(video_ids),
+        'part': 'snippet,contentDetails',
+        'maxResults': 9
+    }
     r = requests.get(video_url, params=video_params)
     results = r.json()['items']
     for result in results:
-            video_data = {
-                'id' : result['id'],
-                'url' : f'https://www.induced.me/YouTube/watch?v={ result["id"] }',
-                'thumbnail' : result['snippet']['thumbnails']['high']['url'],
-                'duration' : int(parse_duration(result['contentDetails']['duration']).total_seconds() // 60),
-                'title' : result['snippet']['title'],
-            }
-            videos.append(video_data)
+        video_data = {
+            'id': result['id'],
+            'url': f'/YouTube/watch?v={ result["id"] }',
+            'thumbnail': result['snippet']['thumbnails']['high']['url'],
+            'duration': int(parse_duration(result['contentDetails']['duration']).total_seconds() // 60),
+            'title': result['snippet']['title'],
+        }
+        videos.append(video_data)
     return render_template('yt.html', videos=videos)
 
 
@@ -390,182 +415,183 @@ def watch():
             return jsonify({"stats": "userid is required to work"})
 
     return render_template('videoplay.html', videos=v)
-            
 
 
 defaultOptions = {
-        "backgroundColor": "rgba(171, 184, 195, 1)",
-        "code": "",
-        "dropShadow": True,
-        "dropShadowBlurRadius": "68px",
-        "dropShadowOffsetY": "20px",
-        "exportSize": "2x",
-        "fontFamily": "Hack",
-        "firstLineNumber": 1,
-        "fontSize": "14px",
-        "language": "auto",
-        "lineNumbers": False,
-        "paddingHorizontal": "56px",
-        "paddingVertical": "56px",
-        "squaredImage": False,
-        "theme": "seti",
-        "watermark": False,
-        "widthAdjustment": True,
-        "windowControls": True,
-        "windowTheme": None,
-    }
+    "backgroundColor": "rgba(171, 184, 195, 1)",
+    "code": "",
+    "dropShadow": True,
+    "dropShadowBlurRadius": "68px",
+    "dropShadowOffsetY": "20px",
+    "exportSize": "2x",
+    "fontFamily": "Hack",
+    "firstLineNumber": 1,
+    "fontSize": "14px",
+    "language": "auto",
+    "lineNumbers": False,
+    "paddingHorizontal": "56px",
+    "paddingVertical": "56px",
+    "squaredImage": False,
+    "theme": "seti",
+    "watermark": False,
+    "widthAdjustment": True,
+    "windowControls": True,
+    "windowTheme": None,
+}
 
 optionToQueryParam = {
-        "backgroundColor": "bg",
-        "code": "code",
-        "dropShadow": "ds",
-        "dropShadowBlurRadius": "dsblur",
-        "dropShadowOffsetY": "dsyoff",
-        "exportSize": "es",
-        "fontFamily": "fm",
-        "firstLineNumber": "fl",
-        "fontSize": "fs",
-        "language": "l",
-        "lineNumbers": "ln",
-        "paddingHorizontal": "ph",
-        "paddingVertical": "pv",
-        "squaredImage": "si",
-        "theme": "t",
-        "watermark": "wm",
-        "widthAdjustment": "wa",
-        "windowControls": "wc",
-        "windowTheme": "wt",
-    }
+    "backgroundColor": "bg",
+    "code": "code",
+    "dropShadow": "ds",
+    "dropShadowBlurRadius": "dsblur",
+    "dropShadowOffsetY": "dsyoff",
+    "exportSize": "es",
+    "fontFamily": "fm",
+    "firstLineNumber": "fl",
+    "fontSize": "fs",
+    "language": "l",
+    "lineNumbers": "ln",
+    "paddingHorizontal": "ph",
+    "paddingVertical": "pv",
+    "squaredImage": "si",
+    "theme": "t",
+    "watermark": "wm",
+    "widthAdjustment": "wa",
+    "windowControls": "wc",
+    "windowTheme": "wt",
+}
 
 optionToQueryParam = {
-        "backgroundColor": "bg",
-        "code": "code",
-        "dropShadow": "ds",
-        "dropShadowBlurRadius": "dsblur",
-        "dropShadowOffsetY": "dsyoff",
-        "exportSize": "es",
-        "fontFamily": "fm",
-        "firstLineNumber": "fl",
-        "fontSize": "fs",
-        "language": "l",
-        "lineNumbers": "ln",
-        "paddingHorizontal": "ph",
-        "paddingVertical": "pv",
-        "squaredImage": "si",
-        "theme": "t",
-        "watermark": "wm",
-        "widthAdjustment": "wa",
-        "windowControls": "wc",
-        "windowTheme": "wt",
-    }
+    "backgroundColor": "bg",
+    "code": "code",
+    "dropShadow": "ds",
+    "dropShadowBlurRadius": "dsblur",
+    "dropShadowOffsetY": "dsyoff",
+    "exportSize": "es",
+    "fontFamily": "fm",
+    "firstLineNumber": "fl",
+    "fontSize": "fs",
+    "language": "l",
+    "lineNumbers": "ln",
+    "paddingHorizontal": "ph",
+    "paddingVertical": "pv",
+    "squaredImage": "si",
+    "theme": "t",
+    "watermark": "wm",
+    "widthAdjustment": "wa",
+    "windowControls": "wc",
+    "windowTheme": "wt",
+}
 
 ignoredOptions = [
-        "backgroundImage",
-        "backgroundImageSelection",
-        "backgroundMode",
-        "squaredImage",
-        "hiddenCharacters",
-        "name",
-        "lineHeight",
-        "loading",
-        "icon",
-        "isVisible",
-        "selectedLines",
-    ]
+    "backgroundImage",
+    "backgroundImageSelection",
+    "backgroundMode",
+    "squaredImage",
+    "hiddenCharacters",
+    "name",
+    "lineHeight",
+    "loading",
+    "icon",
+    "isVisible",
+    "selectedLines",
+]
 
 
 async def get_response(body_, path):
-        browser = await launch(defaultViewPort=None,
-                             handleSIGINT=False,
-                             handleSIGTERM=False,
-                             handleSIGHUP=False,
-                             headless=True,
-                             args=['--no-sandbox', '--disable-setuid-sandbox'])
-        page = await browser.newPage()
-        await page._client.send('Page.setDownloadBehavior', {
-             'behavior': 'allow', 
-             'downloadPath': os.getcwd()+"/tmp"
-         })
-        first = True
-        url = ""
-        validatedBody = {}
-        if not body_['code']:
-            raise Exception("code is required for creating carbon")
+    browser = await launch(defaultViewPort=None,
+                           handleSIGINT=False,
+                           handleSIGTERM=False,
+                           handleSIGHUP=False,
+                           headless=True,
+                           args=['--no-sandbox', '--disable-setuid-sandbox'])
+    page = await browser.newPage()
+    await page._client.send('Page.setDownloadBehavior', {
+        'behavior': 'allow',
+        'downloadPath': os.getcwd()+"/tmp"
+    })
+    first = True
+    url = ""
+    validatedBody = {}
+    if not body_['code']:
+        raise Exception("code is required for creating carbon")
 
-        for option in body_:
-            if option in ignoredOptions:
-                print(f"Unsupported option: {option} found. Ignoring!")
-                continue
-            if (not (option in defaultOptions)):
-                continue
-            validatedBody[option] = body_[option]
-        try:
-            s=validatedBody['backgroundColor'].upper()
-            for ch in s:
-                if ((ch < '0' or ch > '9') and (ch < 'A' or ch > 'F')):  
-                    ishan= False
-            ishan= True
-            if validatedBody['backgroundColor'].startswith('#') or ishan == True:
-                h=validatedBody['backgroundColor']
-                h = h.lstrip('#')
-                validatedBody['backgroundColor'] =  ('rgb'+str(tuple(int(h[i:i+2], 16) for i in (0, 2, 4))))
-        except KeyError:
-            pass
-        for option in validatedBody:
-            if first:
-                first = False
-                url = "https://carbon.now.sh/" + \
-                    f"?{optionToQueryParam[option]}={validatedBody[option]}"
-            else:
-                url = url + \
-                    f"&{optionToQueryParam[option]}={validatedBody[option]}"
-        await page.goto(url, timeout=1000)
-        element = await page.querySelector("#export-container  .container-bg")
-        img = await element.screenshot({'path': path})
-        await browser.close()
-        return (path)
-        data = requests.get(url)
-        if data.status_code==200:
-
-                with open(path, "wb") as file:
-                    file.write(data.content)
-                    file.close()
-
-                return send_file(path, mimetype='image/png')
+    for option in body_:
+        if option in ignoredOptions:
+            print(f"Unsupported option: {option} found. Ignoring!")
+            continue
+        if (not (option in defaultOptions)):
+            continue
+        validatedBody[option] = body_[option]
+    try:
+        s = validatedBody['backgroundColor'].upper()
+        for ch in s:
+            if ((ch < '0' or ch > '9') and (ch < 'A' or ch > 'F')):
+                ishan = False
+        ishan = True
+        if validatedBody['backgroundColor'].startswith('#') or ishan == True:
+            h = validatedBody['backgroundColor']
+            h = h.lstrip('#')
+            validatedBody['backgroundColor'] = (
+                'rgb'+str(tuple(int(h[i:i+2], 16) for i in (0, 2, 4))))
+    except KeyError:
+        pass
+    for option in validatedBody:
+        if first:
+            first = False
+            url = "https://carbon.now.sh/" + \
+                f"?{optionToQueryParam[option]}={validatedBody[option]}"
         else:
-                return jsonify({
-                "error": "Error in api",
-                })
+            url = url + \
+                f"&{optionToQueryParam[option]}={validatedBody[option]}"
+    await page.goto(url, timeout=1000)
+    element = await page.querySelector("#export-container  .container-bg")
+    img = await element.screenshot({'path': path})
+    await browser.close()
+    return (path)
+    data = requests.get(url)
+    if data.status_code == 200:
 
-MORSE_CODE_DICT = { 'A':'.-', 'B':'-...',
+        with open(path, "wb") as file:
+            file.write(data.content)
+            file.close()
 
-                    'C':'-.-.', 'D':'-..', 'E':'.',
+        return send_file(path, mimetype='image/png')
+    else:
+        return jsonify({
+            "error": "Error in api",
+        })
 
-                    'F':'..-.', 'G':'--.', 'H':'....',
+MORSE_CODE_DICT = {'A': '.-', 'B': '-...',
 
-                    'I':'..', 'J':'.---', 'K':'-.-',
+                   'C': '-.-.', 'D': '-..', 'E': '.',
 
-                    'L':'.-..', 'M':'--', 'N':'-.',
+                   'F': '..-.', 'G': '--.', 'H': '....',
 
-                    'O':'---', 'P':'.--.', 'Q':'--.-',
+                   'I': '..', 'J': '.---', 'K': '-.-',
 
-                    'R':'.-.', 'S':'...', 'T':'-',
+                   'L': '.-..', 'M': '--', 'N': '-.',
 
-                    'U':'..-', 'V':'...-', 'W':'.--',
+                   'O': '---', 'P': '.--.', 'Q': '--.-',
 
-                    'X':'-..-', 'Y':'-.--', 'Z':'--..',
+                   'R': '.-.', 'S': '...', 'T': '-',
 
-                    '1':'.----', '2':'..---', '3':'...--',
+                   'U': '..-', 'V': '...-', 'W': '.--',
 
-                    '4':'....-', '5':'.....', '6':'-....',
+                   'X': '-..-', 'Y': '-.--', 'Z': '--..',
 
-                    '7':'--...', '8':'---..', '9':'----.',
+                   '1': '.----', '2': '..---', '3': '...--',
 
-                    '0':'-----', ', ':'--..--', '.':'.-.-.-',
+                   '4': '....-', '5': '.....', '6': '-....',
 
-                    '?':'..--..', '/':'-..-.', '-':'-....-',
+                   '7': '--...', '8': '---..', '9': '----.',
 
-                    '(':'-.--.', ')':'-.--.-'}
+                   '0': '-----', ', ': '--..--', '.': '.-.-.-',
+
+                   '?': '..--..', '/': '-..-.', '-': '-....-',
+
+                   '(': '-.--.', ')': '-.--.-'}
+
 
 def encrypt(message):
     cipher = ''
@@ -575,6 +601,7 @@ def encrypt(message):
         else:
             cipher += ' '
     return cipher
+
 
 def decrypt(message):
     message += ' '
@@ -586,13 +613,14 @@ def decrypt(message):
             citext += letter
         else:
             i += 1
-            if i == 2 :
+            if i == 2:
                 decipher += ' '
             else:
                 decipher += list(MORSE_CODE_DICT.keys())[list(MORSE_CODE_DICT
-                .values()).index(citext)]
+                                                              .values()).index(citext)]
                 citext = ''
     return decipher
+
 
 """
 
@@ -621,4 +649,4 @@ def Clear(n):
 """
 
 if __name__ == "__main__":
-    app.run(debug=True ,use_reloader=True, threaded=True)
+    app.run(debug=True, use_reloader=True, threaded=True)
