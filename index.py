@@ -354,8 +354,7 @@ def index():
     video_ids = []
     for result in results:
         video_ids.append(result['id']['videoId'])
-    if request.form.get('submit') == 'lucky':
-            return redirect(f'https://www.youtube.com/watch?v={ video_ids[0] }')
+
     video_params = {
             'key' : "AIzaSyDHaYtqlyjOIljQbfRvCxHgfSB3Jtn8DSQ",
             'id' : ','.join(video_ids),
