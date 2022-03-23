@@ -333,7 +333,7 @@ def moneytrans():
         return jsonify({"stats": f"{e}"})
 
 
-    
+@app.route('/youtube', methods=['GET', 'POST'])
 @app.route('/YouTube', methods=['GET', 'POST'])
 def index():
     video_url = 'https://www.googleapis.com/youtube/v3/videos'
@@ -342,37 +342,29 @@ def index():
     ref= request.form.get('query')
     if ref==None:
         ref="Induced Official"
-
-    if request.method == 'POST':
-        search_params = { 
+    search_params = { 
             'key' : "AIzaSyDHaYtqlyjOIljQbfRvCxHgfSB3Jtn8DSQ",
             'q' : ref,
             'part' : 'snippet',
             'maxResults' : 9,
             'type' : 'video'
         }
-
-        r = requests.get('https://www.googleapis.com/youtube/v3/search', params=search_params)
-
-        results = r.json()['items']
-
-        video_ids = []
-        for result in results:
-            video_ids.append(result['id']['videoId'])
-
-        if request.form.get('submit') == 'lucky':
+    r = requests.get('https://www.googleapis.com/youtube/v3/search', params=search_params)
+    results = r.json()['items']
+    video_ids = []
+    for result in results:
+        video_ids.append(result['id']['videoId'])
+    if request.form.get('submit') == 'lucky':
             return redirect(f'https://www.youtube.com/watch?v={ video_ids[0] }')
-
-        video_params = {
+    video_params = {
             'key' : "AIzaSyDHaYtqlyjOIljQbfRvCxHgfSB3Jtn8DSQ",
             'id' : ','.join(video_ids),
             'part' : 'snippet,contentDetails',
             'maxResults' : 9
         }
-
-        r = requests.get(video_url, params=video_params)
-        results = r.json()['items']
-        for result in results:
+    r = requests.get(video_url, params=video_params)
+    results = r.json()['items']
+    for result in results:
             video_data = {
                 'id' : result['id'],
                 'url' : f'https://www.induced.me/YouTube/watch?v={ result["id"] }',
@@ -381,7 +373,6 @@ def index():
                 'title' : result['snippet']['title'],
             }
             videos.append(video_data)
-        
     return render_template('yt.html', videos=videos)
 
 
