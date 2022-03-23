@@ -370,7 +370,7 @@ def index():
         'key': "AIzaSyDHaYtqlyjOIljQbfRvCxHgfSB3Jtn8DSQ",
         'q': ref,
         'part': 'snippet',
-        'maxResults': 9,
+        'maxResults': 21,
         'type': 'video'
     }
     r = requests.get(
@@ -384,7 +384,7 @@ def index():
         'key': "AIzaSyDHaYtqlyjOIljQbfRvCxHgfSB3Jtn8DSQ",
         'id': ','.join(video_ids),
         'part': 'snippet,contentDetails',
-        'maxResults': 9
+        'maxResults': 21
     }
     r = requests.get(video_url, params=video_params)
     results = r.json()['items']
