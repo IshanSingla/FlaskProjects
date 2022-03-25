@@ -8,28 +8,14 @@ from isodate import parse_duration
 from firebase_admin import db, credentials
 from pyppeteer import launch
 from lyrics_extractor import SongLyrics
-from datetime import datetime, date
-
-import json, os, secrets
-from flask.json import JSONEncoder
-from bson import json_util
-from pymongo import MongoClient
-
-class CustomJSONEncoder(JSONEncoder):
-    def default(self, obj): return json_util.default(obj)
-
-cluster = MongoClient("mongodb+srv://ishan:eEJnaBRR1CMXWQYS@cluster0.aaaok.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
-collection = cluster['users']['users']
-token = cluster['users']['token']
-public = cluster['users']['public_token']
+from datetime import datetime
 
 cred = credentials.Certificate('1.json')
 default_app = firebase_admin.initialize_app(
     cred, {'databaseURL': "https://flask-c50a2-default-rtdb.asia-southeast1.firebasedatabase.app/"})
 
 app = Flask(__name__)
-app.json_encoder = CustomJSONEncoder
-app.secret_key = 'i_iz_noob'
+app.secret_key = 'IshanSingla'
 loop = asyncio.get_event_loop()
 
 
@@ -116,18 +102,47 @@ def morse():
     else:
         encode = request.args.get('encode')
         decode = request.args.get('decode')
-
+    MORSE_CODE_DICT = {
+        'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.',
+        'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-',
+        'L': '.-..', 'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-',
+        'R': '.-.', 'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--',
+        'X': '-..-', 'Y': '-.--', 'Z': '--..', '1': '.----', '2': '..---', '3': '...--',
+        '4': '....-', '5': '.....', '6': '-....', '7': '--...', '8': '---..', '9': '----.',
+        '0': '-----', ', ': '--..--', '.': '.-.-.-', '?': '..--..', '/': '-..-.', '-': '-....-',
+        '(': '-.--.', ')': '-.--.-'
+    }
     if not encode == None:
-        result = encrypt(encode.upper())
+        cipher = ''
+        for letter in encode.upper():
+            if letter != ' ':
+                cipher += MORSE_CODE_DICT[letter] + ' '
+            else:
+                cipher += ' '
         return jsonify({
             "word": f"{encode}",
-            "morse": f"{result}",
+            "morse": f"{cipher}",
         })
     elif not decode == None:
-        result = decrypt(decode)
+        message = decode
+        message += ' '
+        decipher = ''
+        citext = ''
+        for letter in message:
+            if (letter != ' '):
+                i = 0
+                citext += letter
+            else:
+                i += 1
+                if i == 2:
+                    decipher += ' '
+                else:
+                    decipher += list(MORSE_CODE_DICT.keys()
+                                     )[list(MORSE_CODE_DICT.values()).index(citext)]
+                    citext = ''
         return jsonify({
             "morse": f"{decode}",
-            "word": f"{result}",
+            "word": f"{decipher}",
         })
     else:
         return jsonify({
@@ -431,88 +446,63 @@ def watch():
     return render_template('videoplay.html', videos=v)
 
 
-defaultOptions = {
-    "backgroundColor": "rgba(171, 184, 195, 1)",
-    "code": "",
-    "dropShadow": True,
-    "dropShadowBlurRadius": "68px",
-    "dropShadowOffsetY": "20px",
-    "exportSize": "2x",
-    "fontFamily": "Hack",
-    "firstLineNumber": 1,
-    "fontSize": "14px",
-    "language": "auto",
-    "lineNumbers": False,
-    "paddingHorizontal": "56px",
-    "paddingVertical": "56px",
-    "squaredImage": False,
-    "theme": "seti",
-    "watermark": False,
-    "widthAdjustment": True,
-    "windowControls": True,
-    "windowTheme": None,
-}
-
-optionToQueryParam = {
-    "backgroundColor": "bg",
-    "code": "code",
-    "dropShadow": "ds",
-    "dropShadowBlurRadius": "dsblur",
-    "dropShadowOffsetY": "dsyoff",
-    "exportSize": "es",
-    "fontFamily": "fm",
-    "firstLineNumber": "fl",
-    "fontSize": "fs",
-    "language": "l",
-    "lineNumbers": "ln",
-    "paddingHorizontal": "ph",
-    "paddingVertical": "pv",
-    "squaredImage": "si",
-    "theme": "t",
-    "watermark": "wm",
-    "widthAdjustment": "wa",
-    "windowControls": "wc",
-    "windowTheme": "wt",
-}
-
-optionToQueryParam = {
-    "backgroundColor": "bg",
-    "code": "code",
-    "dropShadow": "ds",
-    "dropShadowBlurRadius": "dsblur",
-    "dropShadowOffsetY": "dsyoff",
-    "exportSize": "es",
-    "fontFamily": "fm",
-    "firstLineNumber": "fl",
-    "fontSize": "fs",
-    "language": "l",
-    "lineNumbers": "ln",
-    "paddingHorizontal": "ph",
-    "paddingVertical": "pv",
-    "squaredImage": "si",
-    "theme": "t",
-    "watermark": "wm",
-    "widthAdjustment": "wa",
-    "windowControls": "wc",
-    "windowTheme": "wt",
-}
-
-ignoredOptions = [
-    "backgroundImage",
-    "backgroundImageSelection",
-    "backgroundMode",
-    "squaredImage",
-    "hiddenCharacters",
-    "name",
-    "lineHeight",
-    "loading",
-    "icon",
-    "isVisible",
-    "selectedLines",
-]
-
-
 async def get_response(body_, path):
+    defaultOptions = {
+        "backgroundColor": "rgba(171, 184, 195, 1)",
+        "code": "",
+        "dropShadow": True,
+        "dropShadowBlurRadius": "68px",
+        "dropShadowOffsetY": "20px",
+        "exportSize": "2x",
+        "fontFamily": "Hack",
+        "firstLineNumber": 1,
+        "fontSize": "14px",
+        "language": "auto",
+        "lineNumbers": False,
+        "paddingHorizontal": "56px",
+        "paddingVertical": "56px",
+        "squaredImage": False,
+        "theme": "seti",
+        "watermark": False,
+        "widthAdjustment": True,
+        "windowControls": True,
+        "windowTheme": None,
+    }
+    optionToQueryParam = {
+        "backgroundColor": "bg",
+        "code": "code",
+        "dropShadow": "ds",
+        "dropShadowBlurRadius": "dsblur",
+        "dropShadowOffsetY": "dsyoff",
+        "exportSize": "es",
+        "fontFamily": "fm",
+        "firstLineNumber": "fl",
+        "fontSize": "fs",
+        "language": "l",
+        "lineNumbers": "ln",
+        "paddingHorizontal": "ph",
+        "paddingVertical": "pv",
+        "squaredImage": "si",
+        "theme": "t",
+        "watermark": "wm",
+        "widthAdjustment": "wa",
+        "windowControls": "wc",
+        "windowTheme": "wt",
+    }
+    ignoredOptions = [
+        "backgroundImage",
+        "backgroundImageSelection",
+        "backgroundMode",
+        "squaredImage",
+        "hiddenCharacters",
+        "name",
+        "lineHeight",
+        "loading",
+        "icon",
+        "isVisible",
+        "selectedLines",
+    ]
+
     browser = await launch(defaultViewPort=None,
                            handleSIGINT=False,
                            handleSIGTERM=False,
@@ -576,232 +566,6 @@ async def get_response(body_, path):
             "error": "Error in api",
         })
 
-MORSE_CODE_DICT = {'A': '.-', 'B': '-...',
-
-                   'C': '-.-.', 'D': '-..', 'E': '.',
-
-                   'F': '..-.', 'G': '--.', 'H': '....',
-
-                   'I': '..', 'J': '.---', 'K': '-.-',
-
-                   'L': '.-..', 'M': '--', 'N': '-.',
-
-                   'O': '---', 'P': '.--.', 'Q': '--.-',
-
-                   'R': '.-.', 'S': '...', 'T': '-',
-
-                   'U': '..-', 'V': '...-', 'W': '.--',
-
-                   'X': '-..-', 'Y': '-.--', 'Z': '--..',
-
-                   '1': '.----', '2': '..---', '3': '...--',
-
-                   '4': '....-', '5': '.....', '6': '-....',
-
-                   '7': '--...', '8': '---..', '9': '----.',
-
-                   '0': '-----', ', ': '--..--', '.': '.-.-.-',
-
-                   '?': '..--..', '/': '-..-.', '-': '-....-',
-
-                   '(': '-.--.', ')': '-.--.-'}
-
-
-def encrypt(message):
-    cipher = ''
-    for letter in message:
-        if letter != ' ':
-            cipher += MORSE_CODE_DICT[letter] + ' '
-        else:
-            cipher += ' '
-    return cipher
-
-
-def decrypt(message):
-    message += ' '
-    decipher = ''
-    citext = ''
-    for letter in message:
-        if (letter != ' '):
-            i = 0
-            citext += letter
-        else:
-            i += 1
-            if i == 2:
-                decipher += ' '
-            else:
-                decipher += list(MORSE_CODE_DICT.keys())[list(MORSE_CODE_DICT
-                                                              .values()).index(citext)]
-                citext = ''
-    return decipher
-
-
-
-def create_token(userid):
-    APItoken = secrets.token_hex(int(os.getenv('hex')))
-    token.update_one(
-            {"user":userid},
-            {
-                "$set": {
-                    "token": APItoken
-                }
-            },
-            upsert=True,
-        )
-    return APItoken
-
-def create_public_token(userid):
-    PAPItoken = secrets.token_hex(int(os.getenv('hex')))
-    public.update_one(
-            {"user":userid},
-            {
-                "$set": {
-                    "public_token": PAPItoken
-                }
-            },
-            upsert=True,
-        )
-    return PAPItoken
-
-
-@app.route('/public', methods = ['GET'])
-def pbtoken():
-    user = request.args.get('id')
-    cred = request.args.get('token')
-    admin = token.find_one({"token":cred}, {"user":1})
-    if admin == None:
-        return jsonify({"error":"invalid token."})
-    if user == None:
-        return jsonify({"error":"please provide user."})
-    return jsonify({
-        "status":"success",
-        "user":user,
-        "token": create_public_token(user)
-    })
-
-
-@app.route('/', methods=['GET', 'POST'])
-def main():
-    if request.method == 'POST':
-        user = request.form.get('user')
-        password = request.form.get('pass')
-        if password == os.getenv('password'):
-            return jsonify({
-                "user_registered":"true",
-                "user":user,
-                "token": create_token(user)
-            })
-        else:
-            return jsonify({"error":"no such user."})
-    else:
-        return redirect(os.getenv('docspage'))
-    return 
-    
-
-@app.route('/find', methods = ['GET'])
-def find():
-    userid = request.args.get("id")
-    token = request.args.get("token")
-    cred = request.args.get("token")
-    if token != None:
-        true_token = public.find_one({"public_token":token}, {"user":1})
-    else:
-        return jsonify({"error":"invalid token"})
-    if true_token == None:
-        token_check = token.find_one({"token":cred}, {"user":1})
-        if token_check == None:
-            return jsonify({"error":"invalid token"})
-    for i in collection.find({"user_id":userid}, {'_id':0}):
-        print(i['reason'])
-        return jsonify({
-            "flagged":True,
-            "user_id":i['user_id'],
-            "reason": i['reason']
-        })
-    try:
-        return i
-    except UnboundLocalError:
-        return jsonify({"flagged":False})
-    
-
-@app.route('/unban', methods = ['GET'])
-def unban():
-    userid = request.args.get("id")
-    cred = request.args.get('cred')
-    admin = token.find_one({"token":cred}, {"user":1})
-    if admin == None:
-        return jsonify({"error":"not admin."})
-    query = {"user_id":str(userid)}
-    collection.delete_many(query)
-    return jsonify({
-        "flagged":False,
-        "user_id":userid,
-        "update":"user unbanned successfully."
-    })
-    
-
-@app.route('/ban', methods = ['GET'])
-def ban():
-    user = request.args.get('id')
-    cred = request.args.get('cred')
-    reason = request.args.get('reason')
-    admin = token.find_one({"token":cred}, {"user":1})
-    if admin == None:
-        return jsonify({"error":"be an admin first."})
-    if reason == None:
-        return jsonify({"error":"you will have to give a reason."})
-    collection.update_one(
-            {"user_id":user},
-            {
-                "$set": {
-                    "reason": reason
-                }
-            },
-            upsert=True,
-        )   
-    return jsonify({
-        "flagged":True,
-        "user_id":user,
-        "reason":reason
-    })
-
-
-@app.route('/all',methods = ['GET'])
-def all():
-    cred = request.args.get("token")
-    admin = token.find_one({"token":cred}, {"user":1})
-    if admin == None:
-        return jsonify({"error":"be an admin first."})
-    total = []
-    for i in collection.find({},{'_id':0}):
-        total.append(i)
-    data = json.loads(json.dumps(total))
-    return jsonify(data)
-
-
-@app.route('/stats', methods=['GET'])
-def stats():
-    for i in collection.find({}, {'_id':0}):
-        banned = len(i['user_id'])
-        return jsonify({
-            "total_flagged_users":banned
-        })
-
-@app.route('/admin/user', methods=['GET'])
-def getuser():
-    APItoken = request.args.get("token")
-    for i in token.find({"token":APItoken}, {'_id':0}):
-        return i
-    try:
-        return i
-    except UnboundLocalError:
-        return jsonify({"error":"no such token found."})
-    return 
-
-
-"""
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=os.getenv('PORT', 6969))
 
 @app.route('/Gen/<string:n>')
 def gen(n):
@@ -814,8 +578,9 @@ def gen(n):
     })
 
 @app.route('/Clear/<string:n>')
-def Clear(n):
+def clear(n):
     key="".join(n[0:8])
+    Keys=[]
     if not key in Keys:
         stat="Key Not Available"
     else:
@@ -825,7 +590,6 @@ def Clear(n):
     return jsonify({
         "stats":stat
     })
-"""
 
 if __name__ == "__main__":
-    app.run(debug=True, use_reloader=True, threaded=True)
+    app.run(debug=True, use_reloader=True, threaded=True,host='127.0.0.1', port=os.getenv('PORT', 9050))
