@@ -12,7 +12,7 @@ from datetime import datetime
 
 cred = credentials.Certificate('1.json')
 default_app = firebase_admin.initialize_app(
-    cred, {'databaseURL': "https://flask-c50a2-default-rtdb.asia-southeast1.firebasedatabase.app/"})
+    cred, {'databaseURL': os.getenv('link2',"https://flask-c50a2-default-rtdb.asia-southeast1.firebasedatabase.app/")})
 
 app = Flask(__name__)
 app.secret_key = 'IshanSingla'
