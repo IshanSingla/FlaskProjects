@@ -5,5 +5,3 @@ lyrics_extractor
 pyqrcode
 pypng
 isodate
-pymongo
-"pymongo[srv]"
