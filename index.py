@@ -12,7 +12,7 @@ from datetime import datetime
 
 cred = credentials.Certificate('1.json')
 default_app = firebase_admin.initialize_app(
-    cred, {'databaseURL': os.getenv('link2',"https://flask-c50a2-default-rtdb.asia-southeast1.firebasedatabase.app/")})
+    cred, {'databaseURL': os.getenv('link',"")})
 
 app = Flask(__name__)
 app.secret_key = 'IshanSingla'
@@ -395,13 +395,12 @@ def index():
     if ref == None:
         ref = "Induced Official"
     search_params = {
-        'key': "AIzaSyDHaYtqlyjOIljQbfRvCxHgfSB3Jtn8DSQ",
+        'key': os.getenv('key',""),
         'q': ref,
         'part': 'snippet',
         'maxResults': 30,
         'type': 'video'
     }
-
     r = requests.get(
         'https://www.googleapis.com/youtube/v3/search', params=search_params)
     results = r.json()['items']
@@ -410,7 +409,7 @@ def index():
         video_ids.append(result['id']['videoId'])
 
     video_params = {
-        'key': "AIzaSyDHaYtqlyjOIljQbfRvCxHgfSB3Jtn8DSQ",
+        'key': os.getenv('key',""),
         'id': ','.join(video_ids),
         'part': 'snippet,contentDetails',
         'maxResults': 30,
