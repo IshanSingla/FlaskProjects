@@ -211,7 +211,7 @@ def qr():
         if not encode == None:
             sample_string =f"{encode} {datetime.datetime.now().strftime('%d-%m-%Y')} {time}"
             base64_string = base64.b64encode(sample_string.encode("ascii")).decode("ascii")
-            url = pyqrcode.create(encode)
+            url = pyqrcode.create(base64_string)
             url.png('/tmp/qr.png', scale=6)
             return send_file(('/tmp/qr.png'), mimetype='image/png')
         else:
