@@ -3,7 +3,7 @@ import firebase_admin
 import asyncio
 import os
 import pyqrcode
-import requests, datetime,base64
+import requests, base64
 from isodate import parse_duration
 from firebase_admin import db, credentials
 from pyppeteer import launch
@@ -196,7 +196,7 @@ def qr():
             "error": f"{e}",
         })
 @app.route('/api/mess', methods=['GET', 'POST'])
-def qr():
+def messqr():
     if request.method == "POST":
         data = request.get_json()
         try:
@@ -209,7 +209,7 @@ def qr():
         time = request.args.get('time')
     try:
         if not encode == None:
-            sample_string =f"{encode} {datetime.datetime.now().strftime('%d-%m-%Y')} {time}"
+            sample_string =f"{encode} {datetime.now().strftime('%d-%m-%Y')} {time}"
             base64_string = base64.b64encode(sample_string.encode("ascii")).decode("ascii")
             url = pyqrcode.create(base64_string)
             url.png('/tmp/qr.png', scale=6)
