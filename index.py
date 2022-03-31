@@ -3,7 +3,7 @@ import firebase_admin
 import asyncio
 import os
 import pyqrcode
-import requests
+import requests, datetime
 from isodate import parse_duration
 from firebase_admin import db, credentials
 from pyppeteer import launch
@@ -195,7 +195,32 @@ def qr():
         return jsonify({
             "error": f"{e}",
         })
-
+@app.route('/api/mess', methods=['GET', 'POST'])
+def qr():
+    if request.method == "POST":
+        data = request.get_json()
+        try:
+            encode = data['roll']
+            time = data['time']
+        except KeyError:
+            encode = None
+    else:
+        encode = request.args.get('roll')
+        time = request.args.get('time')
+    try:
+        if not encode == None:
+            f"{encode} {datetime.datetime.now().strftime('%d-%m-%Y')} {time}"
+            url = pyqrcode.create(encode)
+            url.png('/tmp/qr.png', scale=6)
+            return send_file(('/tmp/qr.png'), mimetype='image/png')
+        else:
+            return jsonify({
+                "error": "No Parameter given",
+            })
+    except Exception as e:
+        return jsonify({
+            "error": f"{e}",
+        })
 
 @app.route('/api/notes', methods=['GET', 'POST'])
 def notes():
