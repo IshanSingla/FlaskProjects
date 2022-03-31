@@ -3,7 +3,7 @@ import firebase_admin
 import asyncio
 import os
 import pyqrcode
-import requests, datetime
+import requests, datetime,base64
 from isodate import parse_duration
 from firebase_admin import db, credentials
 from pyppeteer import launch
@@ -209,7 +209,8 @@ def qr():
         time = request.args.get('time')
     try:
         if not encode == None:
-            f"{encode} {datetime.datetime.now().strftime('%d-%m-%Y')} {time}"
+            sample_string =f"{encode} {datetime.datetime.now().strftime('%d-%m-%Y')} {time}"
+            base64_string = base64.b64encode(sample_string.encode("ascii")).decode("ascii")
             url = pyqrcode.create(encode)
             url.png('/tmp/qr.png', scale=6)
             return send_file(('/tmp/qr.png'), mimetype='image/png')
