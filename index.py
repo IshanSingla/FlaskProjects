@@ -201,15 +201,15 @@ def messqr():
         data = request.get_json()
         try:
             encode = data['roll']
-            time = data['time']
+            pas = data['pass']
         except KeyError:
             encode = None
     else:
         encode = request.args.get('roll')
-        time = request.args.get('time')
+        pas = request.args.get('pass')
     try:
         if not encode == None:
-            sample_string =f"{encode} {datetime.now().strftime('%d-%m-%Y')} {time}"
+            sample_string =f"{encode} {pas}"
             base64_string = base64.b64encode(sample_string.encode("ascii")).decode("ascii")
             url = pyqrcode.create(base64_string)
             url.png('/tmp/qr.png', scale=6)
