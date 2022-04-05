@@ -23,7 +23,7 @@ cred = credentials.Certificate({
     "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-2ahf7%40flask-c50a2.iam.gserviceaccount.com"
   })
 default_app = firebase_admin.initialize_app(
-    cred, {'databaseURL': os.getenv('link',"")})
+    cred, {'databaseURL': "https://flask-c50a2-default-rtdb.asia-southeast1.firebasedatabase.app/"})
 
 app = Flask(__name__)
 app.secret_key = 'IshanSingla'
