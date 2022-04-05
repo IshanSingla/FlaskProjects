@@ -5,3 +5,4 @@ lyrics_extractor
 pyqrcode
 pypng
 isodate
+gunicorn
