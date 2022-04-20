@@ -3,7 +3,8 @@ import firebase_admin
 import asyncio
 import os
 import pyqrcode
-import requests, base64
+import requests
+import base64
 from isodate import parse_duration
 from firebase_admin import db, credentials
 from pyppeteer import launch
@@ -13,7 +14,7 @@ from datetime import datetime
 cred = credentials.Certificate({
     "type": "service_account",
     "project_id": "flask-c50a2",
-    "private_key_id": os.getenv('key1',""),
+    "private_key_id": os.getenv('key1', ""),
     "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDq9x24mb0tmEqP\nUET6v6XWmeq5olLXQCpgmaAwSO7Nqs51JxTgePLzmcPhNhR/tu5ZoeFc232lf1M7\nprgFzB3o4j3gTbtE3ekvL/X/1K2ZbrwGA/gxkAxSsfuMAL4jBQgWpEJTcwWhI/Zr\nSgiXfpX5rLdqMc79dq7mtQe1o5LKSNuQqx/uEadVYraqr08zjy7+yBH9U0S3zsUQ\nEOIwgM8hFXdPvLA0rKQPElOhWgL5NsYgilB0QxlPChzmh3XAmUfjz19iYdWEhKGM\nX27qeUJMhICOHDhix6JxYSx3K4Y68MTMmwF9iWV+f0n6qjoq4LJNlZI4LMO1rYME\nGFxHbPMLAgMBAAECggEAT+3caG20EwyZYIM30+zZ51TYqmlzsNGdGNtpyMMmqUQP\nk37F9U5vpzqJjdUtx/xcvJT66vGnnmLf14zxUNeM3SoJToJi0ByFNI4mKu8YVvd6\ncrlq9sE/z+nH3mpqQ9N0Wu9puKWKJrTrILhAj/h54ENG6ZMkDMkQ2l5+zuVkC/dx\n9IHMESbzEBlZljrdWeIFwHJ18Lm8HF/3SgW7wma7bXWQmF/at1sz5dEi37a8iUir\nHf0vds+/44ioM2hDa/D2ckwwZO63NiwoS049FnBO1trZ7tLge9Y/C4ZAZTLxhRtb\nz2Wr1q6Bo/qwg26UWXwux6eJghazOUSKM3O3F2HHoQKBgQD9pagQD1jCg01MdPR6\ndkYDW7xF4xlR9COLyFaYdgDfccVJ+vN5YrGWCrLJFXuab96mPIZwwp0QGxS64Fnf\nnDgOK0Pedd+ynmTPmfB4cMj5/sWHk+pnNTk2teH79Eex97s6ebaxXLnJqCG/HDhR\n36SCBAalPMKQJCQ0zSMt4xqMOQKBgQDtJRhp4pd/wk0oErmG2o0tK5NQavpYqZQr\ngDY8rrCOj2b7RDMS9Omh2/zHvZJANVJJYeMnXswDbH597UcdbnCtUPwY2lRjAmEn\nCqIgSc/Sou4FPqtcNHAMxXjaEwIRHxLluBXQKJepCYGpeyDRTep/BBskQ96fghsl\nA5tsr4CBYwKBgC9QdG4yfqsiFQw7ENO7NkowFYmv2CxKb0sG3uhnsrf7oAKx1jMB\nbwD/E+SgpkLjtVOrHKTyGJxFgPNvIDSvDmHOPkXEFStbkpCLNakx2LuRg8VLmUER\nU4/aE8KNCcav4HQC+kpRcrKkM09T80mKf0Rlfdva3qxGoZ5b2cEYiP45AoGBAMzg\n+5KfPRwXlelFJBwpvUaFGySjB96Jw4VBo5oRol/H7MSwSx/Zj+9Sy7UVRsFKT+ku\nNL3S3JcoqK/Ky2HWBGr4SJSAK9/OMnk0apVSr8XfFZxaZFmoxBWElcByI5r/Kahl\nvhK0vzI/EFKIGfY6RpmtxnUyXaeZFDKKR0FC7tbZAoGBAMITmoiyzf3iZmpiNJSS\n4bDKbeNhD9b5zmHZfl8FVNx6sx2sKJi9kCQeA5+eZi5t6v5xVWSbjRmT23FSpTrw\nfLXFbhufbHFrdqVbzopP60U0US/UNY7i52SVOgT997IlurqiStJLMGTbwENU696D\nEDKT9RhU3Cr0POf/xmB8DOJP\n-----END PRIVATE KEY-----\n",
     "client_email": "firebase-adminsdk-2ahf7@flask-c50a2.iam.gserviceaccount.com",
     "client_id": "110489570503937698903",
@@ -21,7 +22,7 @@ cred = credentials.Certificate({
     "token_uri": "https://oauth2.googleapis.com/token",
     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
     "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-2ahf7%40flask-c50a2.iam.gserviceaccount.com"
-  })
+})
 default_app = firebase_admin.initialize_app(
     cred, {'databaseURL': "https://flask-c50a2-default-rtdb.asia-southeast1.firebasedatabase.app/"})
 
@@ -206,6 +207,8 @@ def qr():
         return jsonify({
             "error": f"{e}",
         })
+
+
 @app.route('/api/mess', methods=['GET', 'POST'])
 def messqr():
     if request.method == "POST":
@@ -220,8 +223,9 @@ def messqr():
         pas = request.args.get('pass')
     try:
         if not encode == None:
-            sample_string =f"{encode} {pas}"
-            base64_string = base64.b64encode(sample_string.encode("ascii")).decode("ascii")
+            sample_string = f"{encode} {pas}"
+            base64_string = base64.b64encode(
+                sample_string.encode("ascii")).decode("ascii")
             url = pyqrcode.create(base64_string)
             url.png('/tmp/qr.png', scale=6)
             return send_file(('/tmp/qr.png'), mimetype='image/png')
@@ -233,6 +237,7 @@ def messqr():
         return jsonify({
             "error": f"{e}",
         })
+
 
 @app.route('/api/notes', methods=['GET', 'POST'])
 def notes():
@@ -432,7 +437,7 @@ def index():
     if ref == None:
         ref = "Induced Official"
     search_params = {
-        'key': os.getenv('key',""),
+        'key': os.getenv('key', ""),
         'q': ref,
         'part': 'snippet',
         'maxResults': 30,
@@ -446,7 +451,7 @@ def index():
         video_ids.append(result['id']['videoId'])
 
     video_params = {
-        'key': os.getenv('key',""),
+        'key': os.getenv('key', ""),
         'id': ','.join(video_ids),
         'part': 'snippet,contentDetails',
         'maxResults': 30,
@@ -744,7 +749,8 @@ async def run(ses):
     except Exception as e:
         print(e)
 
-@app.route('/session', methods=['GET', 'POST'])
+
+@app.route('/api/session', methods=['GET', 'POST'])
 async def session():
     if request.method == "POST":
         data = request.get_json()
@@ -766,7 +772,6 @@ async def session():
             "response": 'uncessfull'
         }
     return jsonify(res)
-
 
 
 @app.route('/YouTube/watch', methods=['GET', 'POST'])
@@ -909,27 +914,30 @@ async def get_response(body_, path):
 
 @app.route('/Gen/<string:n>')
 def gen(n):
-    key="".join(n[0:8])
+    key = "".join(n[0:8])
     proxys = (db.reference(f"/Proxy/{key}/")).get()
-    if proxys ==None:
-        stat="Key Not Available in DataBase"
+    if proxys == None:
+        stat = "Key Not Available in DataBase"
     return jsonify({
-        "stats":stat
+        "stats": stat
     })
+
 
 @app.route('/Clear/<string:n>')
 def clear(n):
-    key="".join(n[0:8])
-    Keys=[]
+    key = "".join(n[0:8])
+    Keys = []
     if not key in Keys:
-        stat="Key Not Available"
+        stat = "Key Not Available"
     else:
-        pros= (db.reference(f"/Proxy/{key}/")).get()
-        pro= (db.reference(f"/Proxy/{key}/")).set([])
-        stat=f"{pros} Terminated"
+        pros = (db.reference(f"/Proxy/{key}/")).get()
+        pro = (db.reference(f"/Proxy/{key}/")).set([])
+        stat = f"{pros} Terminated"
     return jsonify({
-        "stats":stat
+        "stats": stat
     })
 
+
 if __name__ == "__main__":
-    app.run(debug=True, use_reloader=True, threaded=True,host='127.0.0.1', port=os.getenv('PORT', 9050))
+    app.run(debug=True, use_reloader=True, threaded=True,
+            host='127.0.0.1', port=os.getenv('PORT', 9050))
