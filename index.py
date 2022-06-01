@@ -869,6 +869,54 @@ async def session():
     return jsonify(res)
 
 
+@app.route('/api/posts', methods=['GET', 'POST'])
+async def posts():
+    if request.method == "POST":
+        data = request.get_json()
+        try:
+            session = data['session']
+        except KeyError:
+            session = None
+    else:
+        session = request.args.get('session')
+    if session:
+        await run(session)
+        res = [
+            {
+                "userName": "IshanSingla",
+                "postTime": "10 May",
+                "image": "https://pi.tedcdn.com/r/talkstar-photos.s3.amazonaws.com/uploads/72bda89f-9bbf-4685-910a-2f151c4f3a8a/NicolaSturgeon_2019T-embed.jpg?w=512",
+                "PostTitle": "How to work on React",
+                "description": "Ilove Css"
+            },
+            {
+                "userName": "Ishhguh hbanSingla",
+                "postTime": "13 May",
+                "image": "https://pi.tedcdn.com/r/talkstar-photos.s3.amazonaws.com/uploads/72bda89f-9bbf-4685-910a-2f151c4f3a8a/NicolaSturgeon_2019T-embed.jpg?w=512",
+                "PostTitle": "Howjbjb to work on React",
+                "description": "Ilovjhuj huh hihihih hijo iuhihe Css"
+            },
+        ]
+    else:
+        res = [
+            {
+                "userName": "IshanSingla",
+                "postTime": "10 May",
+                "image": "https://pi.tedcdn.com/r/talkstar-photos.s3.amazonaws.com/uploads/72bda89f-9bbf-4685-910a-2f151c4f3a8a/NicolaSturgeon_2019T-embed.jpg?w=512",
+                "PostTitle": "How to work on React",
+                "description": "Ilove Css"
+            },
+            {
+                "userName": "Ishhguh hbanSingla",
+                "postTime": "13 May",
+                "image": "https://pi.tedcdn.com/r/talkstar-photos.s3.amazonaws.com/uploads/72bda89f-9bbf-4685-910a-2f151c4f3a8a/NicolaSturgeon_2019T-embed.jpg?w=512",
+                "PostTitle": "Howjbjb to work on React",
+                "description": "Ilovjhuj huh hihihih hijo iuhihe Css"
+            },
+        ]
+    return jsonify(res)
+
+
 @app.route('/YouTube/watch', methods=['GET', 'POST'])
 def watch():
     search_url = 'https://www.googleapis.com/youtube/v3/search'
