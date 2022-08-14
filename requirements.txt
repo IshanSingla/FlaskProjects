@@ -1,0 +1,4 @@
+flask
+fake_useragent
+requests
+beautifulsoup4
