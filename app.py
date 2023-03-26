@@ -1,8 +1,8 @@
-from pyresparser import ResumeParser
 import os
 from flask import Flask, request, jsonify
 import nltk
 nltk.download('stopwords')
+from pyresparser import ResumeParser
 
 app = Flask(__name__)
 
